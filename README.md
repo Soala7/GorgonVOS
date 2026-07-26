@@ -663,7 +663,6 @@ Gorgon VOS includes a custom system information display inspired by tools such a
 
 Example:
 
-```
 ██████╗ ██╗   ██╗ ██████╗ ██████╗ ███╗   ██╗
 ██╔════╝ ██║   ██║██╔═══██╗██╔══██╗████╗  ██║
 ██║  ███╗██║   ██║██║   ██║██████╔╝██╔██╗ ██║
