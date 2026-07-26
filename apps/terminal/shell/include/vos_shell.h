@@ -39,11 +39,18 @@ void host_register_mkdir(
 );
 
 
-
 void host_register_touch(
     TOUCH_CALLBACK callback
 );
 
+
+void host_register_mv(
+    MV_CALLBACK callback
+);
+
+void host_register_cp(
+    CP_CALLBACK callback
+);
 
 
 void vos_shell_init(void);

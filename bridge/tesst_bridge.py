@@ -62,5 +62,42 @@ print(shell.execute("touch hello.txt"))
 print("\n--- FINAL LS ---")
 print(shell.execute("ls"))
 
+print("\n--- WRITE TEST ---")
+print(shell.execute("write hello.txt Hello World From VOS"))
+
+print("\n--- CAT TEST ---")
+print(shell.execute("cat hello.txt"))
+
+print("\n--- RMDIR TEST ---")
+print(shell.execute("mkdir empty"))
+print(shell.execute("ls"))
+print(shell.execute("rmdir empty"))
+print(shell.execute("ls"))
+print("\n--- TREE TEST ---")
+print(shell.execute("tree"))
+
+print("\n--- MV TEST ---")
+
+print(shell.execute("touch old.txt"))
+
+print(shell.execute("write old.txt Hello MV"))
+
+print(shell.execute("mv old.txt new.txt"))
+
+print(shell.execute("ls"))
+
+print(shell.execute("cat new.txt"))
+
+print("\n--- CP TEST ---")
+
+print(shell.execute("touch original.txt"))
+
+print(shell.execute("write original.txt COPY TEST"))
+
+print(shell.execute("cp original.txt backup.txt"))
+
+print(shell.execute("ls"))
+
+print(shell.execute("cat backup.txt"))
 
 shell.shutdown()

@@ -41,6 +41,47 @@ TOUCH_CALLBACK = ctypes.CFUNCTYPE(
     ctypes.c_char_p
 )
 
+WRITE_CALLBACK = ctypes.CFUNCTYPE(
+    ctypes.c_int,
+    ctypes.c_char_p,
+    ctypes.c_char_p
+)
+
+CAT_CALLBACK = ctypes.CFUNCTYPE(
+    None,
+    ctypes.c_char_p,
+    ctypes.POINTER(ctypes.c_char),
+    ctypes.c_int
+)
+
+RM_CALLBACK = ctypes.CFUNCTYPE(
+    ctypes.c_int,
+    ctypes.c_char_p
+)
+
+RMDIR_CALLBACK = ctypes.CFUNCTYPE(
+    ctypes.c_int,
+    ctypes.c_char_p
+)
+
+TREE_CALLBACK = ctypes.CFUNCTYPE(
+    None,
+    ctypes.POINTER(ctypes.c_char),
+    ctypes.c_int
+)
+
+MV_CALLBACK = ctypes.CFUNCTYPE(
+    ctypes.c_int,
+    ctypes.c_char_p,
+    ctypes.c_char_p
+)
+
+CP_CALLBACK = ctypes.CFUNCTYPE(
+    ctypes.c_int,
+    ctypes.c_char_p,
+    ctypes.c_char_p
+)
+
 class ShellBridge:
 
     def __init__(self):
@@ -93,6 +134,31 @@ class ShellBridge:
         self.shell.host_register_touch.restype = None
         self.shell.host_register_touch.argtypes = [
             TOUCH_CALLBACK
+        ]
+
+        self.shell.host_register_write.argtypes = [
+            WRITE_CALLBACK
+        ]
+
+        self.shell.host_register_cat.restype = None
+        self.shell.host_register_cat.argtypes = [
+            CAT_CALLBACK
+        ]
+
+        self.shell.host_register_rm.argtypes = [
+            RM_CALLBACK
+        ]
+
+        self.shell.host_register_tree.argtypes = [
+            TREE_CALLBACK
+        ]
+
+        self.shell.host_register_mv.argtypes = [
+            MV_CALLBACK
+        ]
+
+        self.shell.host_register_cp.argtypes = [
+            CP_CALLBACK
         ]
 
         self.shell.vos_shell_init()
@@ -201,6 +267,134 @@ class ShellBridge:
 
             return 1 if success else 0
 
+        def write_callback(path, content):
+
+            print("[HOST CALLBACK] write called")
+
+
+            path_string = path.decode("utf-8")
+
+            content_string = content.decode("utf-8")
+
+
+            success = vos_api.write(
+                path_string,
+                content_string
+            )
+
+
+            return 1 if success else 0
+
+        def cat_callback(path, buffer, size):
+
+            print("[HOST CALLBACK] cat called")
+
+            path_string = path.decode("utf-8")
+
+            content = vos_api.cat(path_string)
+
+            if content is None:
+                content = "File not found."
+
+            data = content.encode()
+
+            ctypes.memset(
+                buffer,
+                0,
+                size
+            )
+
+            ctypes.memmove(
+                buffer,
+                data,
+                min(
+                    len(data),
+                    size - 1
+                )
+            )
+
+        def rm_callback(path):
+
+            print("[HOST CALLBACK] rm called")
+
+            path_string = path.decode("utf-8")
+
+            success = vos_api.rm(
+                path_string
+            )
+
+            return 1 if success else 0
+
+        def rmdir_callback(path):
+
+            print("[HOST CALLBACK] rmdir called")
+
+            path_string = path.decode("utf-8")
+
+            success = vos_api.rmdir(
+                path_string
+            )
+
+            return 1 if success else 0
+
+        def tree_callback(buffer, size):
+
+            print("[HOST CALLBACK] tree called")
+
+
+            data = vos_api.tree().encode()
+
+
+            ctypes.memset(
+                buffer,
+                0,
+                size
+            )
+
+
+            ctypes.memmove(
+                buffer,
+                data,
+                min(
+                    len(data),
+                    size - 1
+                )
+            )
+
+        def mv_callback(source, destination):
+
+            print("[HOST CALLBACK] mv called")
+
+
+            source_string = source.decode("utf-8")
+            destination_string = destination.decode("utf-8")
+
+
+            success = vos_api.mv(
+                source_string,
+                destination_string
+            )
+
+
+            return 1 if success else 0
+
+        def cp_callback(source, destination):
+
+            print("[HOST CALLBACK] cp called")
+
+
+            source_string = source.decode("utf-8")
+            destination_string = destination.decode("utf-8")
+
+
+            success = vos_api.cp(
+                source_string,
+                destination_string
+            )
+
+
+            return 1 if success else 0
+
         self.pwd_callback = PWD_CALLBACK(
             pwd_callback
         )
@@ -219,6 +413,34 @@ class ShellBridge:
 
         self.touch_callback = TOUCH_CALLBACK(
             touch_callback
+        )
+
+        self.write_callback = WRITE_CALLBACK(
+            write_callback
+        )
+
+        self.cat_callback = CAT_CALLBACK(
+            cat_callback
+        )
+
+        self.rm_callback = RM_CALLBACK(
+            rm_callback
+        )
+
+        self.rmdir_callback = RMDIR_CALLBACK(
+            rmdir_callback
+        )
+
+        self.tree_callback = TREE_CALLBACK(
+            tree_callback
+        )
+
+        self.mv_callback = MV_CALLBACK(
+            mv_callback
+        )
+
+        self.cp_callback = CP_CALLBACK(
+            cp_callback
         )
 
         self.shell.host_register_pwd(
@@ -240,9 +462,34 @@ class ShellBridge:
         self.shell.host_register_touch(
             self.touch_callback
         )
+
+        self.shell.host_register_write(
+            self.write_callback
+        )
         
+        self.shell.host_register_cat(
+            self.cat_callback
+        )
 
+        self.shell.host_register_rm(
+            self.rm_callback
+        )
 
+        self.shell.host_register_rmdir(
+            self.rmdir_callback
+        )
+
+        self.shell.host_register_tree(
+            self.tree_callback
+        )
+
+        self.shell.host_register_mv(
+            self.mv_callback
+        )
+
+        self.shell.host_register_cp(
+            self.cp_callback
+        )
 
     def execute(self, command):
 

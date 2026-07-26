@@ -162,7 +162,26 @@ class FileSystem:
 
         print("[FILESYSTEM] cd request:", path)
 
-        folder = self._get_folder(path)
+        # Parent directory
+        if path == "..":
+
+            if self.current_directory.parent is not None:
+                self.current_directory = self.current_directory.parent
+
+            return True
+
+
+        # Root directory
+        if path == "/":
+
+            self.current_directory = self.root
+
+            return True
+
+
+        folder = self._get_folder(
+            self._resolve_path(path)
+        )
 
         print("[FILESYSTEM] found folder:", folder)
 
@@ -174,20 +193,52 @@ class FileSystem:
         self.current_directory = folder
 
         return True
-    
-    def read_file(self, path):
+
+    def _resolve_path(self, path):
+
+        if path.startswith("/"):
+            return path
+
+        current = self.get_current_path()
+
+        if current == "/":
+            return "/" + path
+
+        return current + "/" + path
+
+
+    def write_file(self, path, content):
+
+        print("[FILESYSTEM] write file request:", path)
+
+        path = self._resolve_path(path)
 
         folder_path, filename = self._split_file_path(path)
 
         folder = self._get_folder(folder_path)
 
         if folder is None:
-            return None
+            return False
 
+        if filename not in folder.files:
+            return False
 
-        return folder.files.get(filename)
+        folder.files[filename] = content
 
+        return True
 
+    def read_file(self, path):
+    
+            path = self._resolve_path(path)
+    
+            folder_path, filename = self._split_file_path(path)
+    
+            folder = self._get_folder(folder_path)
+    
+            if folder is None:
+                return None
+    
+            return folder.files.get(filename)
 
     def delete_file(self, path):
 
@@ -211,6 +262,57 @@ class FileSystem:
 
         return False
 
+    def delete_folder(self, path):
+
+        print(
+            "[FILESYSTEM] delete folder request:",
+            path
+        )
+
+
+        path = self._resolve_path(path)
+
+        folder_path, folder_name = self._split_file_path(path)
+
+
+        parent_folder = self._get_folder(
+            folder_path
+        )
+
+
+        if parent_folder is None:
+            return False
+
+
+        if folder_name not in parent_folder.folders:
+            return False
+
+
+        folder = parent_folder.folders[folder_name]
+
+
+        # Prevent deleting non-empty folders
+        if folder.files or folder.folders:
+            print(
+                "[FILESYSTEM] folder not empty"
+            )
+
+            return False
+
+
+        parent_folder.remove_folder(
+            folder_name
+        )
+
+
+        print(
+            "[FILESYSTEM] deleted folder:",
+            folder_name
+        )
+
+
+        return True
+
     def list_directory(self, path=None):
         """
         Lists contents of a directory.
@@ -228,6 +330,159 @@ class FileSystem:
 
 
         return None
+
+    def get_tree(self, folder=None, prefix=""):
+
+        if folder is None:
+            folder = self.root
+
+
+        lines = []
+
+
+        for name, subfolder in folder.folders.items():
+
+            lines.append(
+                f"{prefix}{name}/"
+            )
+
+            lines.extend(
+                self.get_tree(
+                    subfolder,
+                    prefix + "    "
+                )
+            )
+
+
+        for filename in folder.files:
+
+            lines.append(
+                f"{prefix}{filename}"
+            )
+
+
+        return lines
+
+    def move_file(self, source, destination):
+
+        print(
+            "[FILESYSTEM] move request:",
+            source,
+            "->",
+            destination
+        )
+
+
+        source = self._resolve_path(source)
+        destination = self._resolve_path(destination)
+
+
+        src_folder_path, filename = self._split_file_path(source)
+
+        src_folder = self._get_folder(
+            src_folder_path
+        )
+
+
+        if src_folder is None:
+            return False
+
+
+        if filename not in src_folder.files:
+            return False
+
+
+        content = src_folder.files[filename]
+
+
+        dst_folder_path, dst_filename = self._split_file_path(destination)
+
+        dst_folder = self._get_folder(
+            dst_folder_path
+        )
+
+
+        if dst_folder is None:
+            return False
+
+
+        if dst_filename in dst_folder.files:
+            return False
+
+
+        # remove from old folder
+        del src_folder.files[filename]
+
+
+        # add to new folder
+        dst_folder.files[dst_filename] = content
+
+
+        print(
+            "[FILESYSTEM] moved:",
+            filename
+        )
+
+
+        return True
+
+    def copy_file(self, source, destination):
+
+        print(
+            "[FILESYSTEM] copy request:",
+            source,
+            "->",
+            destination
+        )
+
+
+        source = self._resolve_path(source)
+        destination = self._resolve_path(destination)
+
+
+        src_folder_path, filename = self._split_file_path(source)
+
+        src_folder = self._get_folder(
+            src_folder_path
+        )
+
+
+        if src_folder is None:
+            return False
+
+
+        if filename not in src_folder.files:
+            return False
+
+
+        content = src_folder.files[filename]
+
+
+        dst_folder_path, dst_filename = self._split_file_path(destination)
+
+        dst_folder = self._get_folder(
+            dst_folder_path
+        )
+
+
+        if dst_folder is None:
+            return False
+
+
+        if dst_filename in dst_folder.files:
+            return False
+
+
+        dst_folder.files[dst_filename] = content
+
+
+        print(
+            "[FILESYSTEM] copied:",
+            filename
+        )
+
+
+        return True
 
 
 

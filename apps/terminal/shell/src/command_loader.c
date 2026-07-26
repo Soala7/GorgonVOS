@@ -29,6 +29,13 @@ extern Command ls_command;
 extern Command cd_command;
 extern Command mkdir_command;
 extern Command touch_command;
+extern Command cat_command;
+extern Command write_command;
+extern Command rm_command;
+extern Command rmdir_command;
+extern Command tree_command;
+extern Command mv_command;
+extern Command cp_command;
 
 void load_commands(void)
 {
@@ -45,17 +52,11 @@ void load_commands(void)
     registry_register(&cd_command);
     registry_register(&mkdir_command);
     registry_register(&touch_command);
-
-    printf("REGISTERED COMMANDS:\n");
-
-    for(int i = 0; i < registry_count(); i++)
-    {
-        printf("%s\n", registry_get(i)->name);
-    }
-
-    printf("cd execute address: %p\n", cd_command.execute);
-    printf("mkdir execute address: %p\n", mkdir_command.execute);
-
-    printf("cd command address: %p\n", &cd_command);
-    printf("mkdir command address: %p\n", &mkdir_command);
+    registry_register(&cat_command);
+    registry_register(&write_command);
+    registry_register(&rm_command);
+    registry_register(&rmdir_command);
+    registry_register(&tree_command);
+    registry_register(&mv_command);
+    registry_register(&cp_command);
 }

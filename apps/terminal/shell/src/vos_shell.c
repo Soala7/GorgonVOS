@@ -89,8 +89,68 @@ void host_register_touch(
 }
 
 
+void host_register_write(
+    WRITE_CALLBACK callback
+)
+{
+    host_manager_set_write(
+        callback
+    );
+}
 
+void host_register_cat(
+    CAT_CALLBACK callback
+)
+{
+    host_manager_set_cat(
+        callback
+    );
+}
 
+void host_register_rm(
+    RM_CALLBACK callback
+)
+{
+    host_manager_set_rm(
+        callback
+    );
+}
+
+void host_register_rmdir(
+    RMDIR_CALLBACK callback
+)
+{
+    host_manager_set_rmdir(
+        callback
+    );
+}
+
+void host_register_tree(
+    TREE_CALLBACK callback
+)
+{
+    host_manager_set_tree(
+        callback
+    );
+}
+
+void host_register_mv(
+    MV_CALLBACK callback
+)
+{
+    host_manager_set_mv(
+        callback
+    );
+}
+
+void host_register_cp(
+    CP_CALLBACK callback
+)
+{
+    host_manager_set_cp(
+        callback
+    );
+}
 
 const char *vos_shell_execute(
     const char *input

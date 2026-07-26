@@ -84,7 +84,7 @@ def main() -> None:
         renderer.begin_frame()
 
         renderer.clear(
-            (18,18,22)
+            (18,18,18)
         )
 
         boot.draw(renderer)
