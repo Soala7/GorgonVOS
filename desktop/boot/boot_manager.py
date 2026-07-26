@@ -33,13 +33,17 @@ class BootManager:
     LOGIN = "login"
     DESKTOP = "desktop"
 
-    def __init__(self) -> None:
+    def __init__(self, kernel) -> None:
+
+        self.kernel = kernel
 
         self.boot_screen = BootScreen()
 
         self.login_screen = LoginScreen()
 
-        self.shell = Shell()
+        self.shell = Shell(
+            kernel.service_manager
+        )
 
         self.cursor = cursor_manager
 

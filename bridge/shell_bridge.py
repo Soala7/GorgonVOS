@@ -83,8 +83,9 @@ CP_CALLBACK = ctypes.CFUNCTYPE(
 )
 
 class ShellBridge:
+    def __init__(self, service_manager):
 
-    def __init__(self):
+        self.service_manager = service_manager
 
         shell_path = os.path.join(
             os.path.dirname(__file__),

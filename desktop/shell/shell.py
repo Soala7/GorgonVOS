@@ -14,11 +14,13 @@ class Shell:
     Main desktop shell.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, service_manager) -> None:
 
         self.desktop = Desktop()
 
-        self.terminal = Terminal()
+        self.terminal = Terminal(service_manager)
+
+        self.service_manager = service_manager
 
         self.terminal.window_manager = self.desktop.window_manager
 

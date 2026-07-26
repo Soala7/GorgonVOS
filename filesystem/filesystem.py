@@ -3,18 +3,54 @@ VOS Virtual Filesystem
 
 Manages files and folders inside the virtual operating system.
 """
+import os
 
 from .folder import Folder
-
+from .storage import FileSystemStorage
 
 class FileSystem:
 
     def __init__(self, event_bus=None):
+
         self.event_bus = event_bus
 
-        self.root = Folder("/")
+        self.storage = FileSystemStorage()
+
+        base_path = os.path.dirname(
+            os.path.dirname(
+                    os.path.abspath(__file__)
+                )
+            )
+        
+        self.save_path = os.path.join(
+            base_path,
+            "data",
+            "VOS.os"
+        )
+
+        loaded = self.storage.load(
+            self.save_path
+        )
+
+
+        if loaded:
+
+            print("[FILESYSTEM] Restoring saved filesystem")
+
+            self.root = loaded
+
+        else:
+
+            print(
+                "[FILESYSTEM] Creating new filesystem"
+            )
+
+            self.root = Folder("/")
+
+            self._create_default_structure()
+
+
         self.current_directory = self.root
-        self._create_default_structure()
     def _create_default_structure(self):
         """
         Creates the default VOS directory structure.
@@ -484,7 +520,38 @@ class FileSystem:
 
         return True
 
+    def _load_or_create(self):
 
+        loaded = self.storage.load(
+            self.save_path
+        )
+
+
+        if loaded:
+
+            print(
+                "[FILESYSTEM] Restoring saved filesystem"
+            )
+
+            self.root = loaded
+            self.current_directory = self.root
+
+            return
+
+
+        print(
+            "[FILESYSTEM] Creating new filesystem"
+        )
+
+
+        self.root = Folder("/")
+        self.current_directory = self.root
+
+
+        self._create_default_structure()
+
+
+        self.save()
 
     def _split_path(self, path):
 
@@ -530,4 +597,9 @@ class FileSystem:
 
         return current
     
-    
+    def save(self):
+
+        self.storage.save(
+            self.root,
+            self.save_path
+        )

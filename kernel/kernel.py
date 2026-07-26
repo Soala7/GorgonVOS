@@ -5,7 +5,7 @@ from resources.resource_manager import ResourceManager
 from filesystem.filesystem import FileSystem
 from bridge.vos_api import vos_api
 from process.manager import ProcessManager
-
+from kernel.shutdown_manager import ShutdownManager
 
 class Kernel:
     def __init__(self):
@@ -72,6 +72,30 @@ class Kernel:
         logger.info(
             "Core services registered."
         )
+
+        shutdown_manager = ShutdownManager(
+            sm
+        )
+
+
+        sm.register(
+            "shutdown",
+            shutdown_manager
+        )
+
+    def shutdown(self):
+
+        logger = self.service_manager.get("logger")
+
+        logger.info("Shutdown requested")
+
+        filesystem = self.service_manager.get("filesystem")
+
+        if filesystem:
+            filesystem.save()
+            print("[SYSTEM] Filesystem saved")
+
+        logger.info("Shutdown complete")
 
     def _setup_event_system(self):
         bus = self.event_bus

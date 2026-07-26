@@ -91,22 +91,34 @@ class Window(Panel):
         x, y = int(self.transform.position.x), int(self.transform.position.y)
         w, h = int(self.transform.size.width), int(self.transform.size.height)
         
-        # Shadow Effect
-        shadow = pygame.Surface((w + 16, h + 16), pygame.SRCALPHA)
-        pygame.draw.rect(shadow, (0, 0, 0, 45), shadow.get_rect(), border_radius=self.BORDER_RADIUS + 6)
-        surface.blit(shadow, (x - 8, y - 4))
+        # Dynamically determine corner radius
+        current_radius = 0 if self.maximized else self.BORDER_RADIUS
 
-        window = pygame.Rect(x, y, w, h)
-        border = (110, 110, 130) if self.active else (70, 70, 80)
+        # Shadow Effect (only draw if not maximized so it doesn't bleed off screen)
+        if not self.maximized:
+            shadow = pygame.Surface((w + 16, h + 16), pygame.SRCALPHA)
+            pygame.draw.rect(shadow, (0, 0, 0, 45), shadow.get_rect(), border_radius=current_radius + 6)
+            surface.blit(shadow, (x - 8, y - 4))
 
-        # Window Frame Background
-        pygame.draw.rect(surface, border, window, border_radius=self.BORDER_RADIUS)
-        pygame.draw.rect(surface, border, window, 1, border_radius=self.BORDER_RADIUS)
+        # Create an alpha-supported surface for window transparency
+        window_surface = pygame.Surface((w, h), pygame.SRCALPHA)
+
+        # Set transparent colors
+        border = (20, 20, 22, 215) if self.active else (70, 70, 80, 215)
+        titlebar_color = (42, 42, 48, 230)
+
+        # Window Frame Background (drawn locally at 0,0 on the temporary surface)
+        pygame.draw.rect(window_surface, border, window_surface.get_rect(), border_radius=current_radius)
+        pygame.draw.rect(window_surface, border, window_surface.get_rect(), 1, border_radius=current_radius)
 
         # Title bar background
-        titlebar = pygame.Rect(x, y, w, self.TITLEBAR_HEIGHT)
-        pygame.draw.rect(surface, (42, 42, 48), titlebar, border_top_left_radius=self.BORDER_RADIUS, border_top_right_radius=self.BORDER_RADIUS)
+        titlebar = pygame.Rect(0, 0, w, self.TITLEBAR_HEIGHT)
+        pygame.draw.rect(window_surface, titlebar_color, titlebar, border_top_left_radius=current_radius, border_top_right_radius=current_radius)
 
+        # Blit the transparent window surface to the main renderer
+        surface.blit(window_surface, (x, y))
+
+        # Text and Buttons can be drawn normally over the main surface
         renderer.draw_text(self.title, self.font, (235, 235, 235), pygame.Vector2(x + 16, y + 9))
 
         # Buttons Rendering Layout

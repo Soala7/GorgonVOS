@@ -7,9 +7,14 @@ from apps.terminal.terminal_window import TerminalWindow
 
 class Terminal:
 
-    def __init__(self):
+    def __init__(self, service_manager):
 
-        self.window = TerminalWindow()
+        self.service_manager = service_manager
+
+        self.window = TerminalWindow(
+            service_manager
+        )
+
         self.window_manager = None
 
 
@@ -45,7 +50,9 @@ class Terminal:
 
 
         if self.window.closed:
-            self.window = TerminalWindow()
+            self.window = TerminalWindow(
+                self.service_manager
+            )
 
 
         self.window.restore()

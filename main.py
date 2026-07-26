@@ -10,10 +10,7 @@ import pygame
 
 from desktop.boot.boot_manager import BootManager
 from desktop.renderer.pygame_renderer import PygameRenderer
-
-from filesystem.filesystem import FileSystem
-from bridge.vos_api import vos_api
-
+from kernel.kernel import Kernel
 
 WIDTH = 1600
 HEIGHT = 900
@@ -35,17 +32,13 @@ def main() -> None:
         pygame.RESIZABLE,
     )
 
-
     # -----------------------------
-    # Initialize VOS core services
+    # Start VOS Kernel
     # -----------------------------
 
-    filesystem = FileSystem()
+    kernel = Kernel()
 
-    vos_api.register_filesystem(
-        filesystem
-    )
-
+    kernel.boot()
 
     # -----------------------------
     # Start graphics system
@@ -56,7 +49,7 @@ def main() -> None:
     renderer = PygameRenderer(screen)
 
 
-    boot = BootManager()
+    boot = BootManager(kernel)
 
 
     running = True
@@ -70,6 +63,8 @@ def main() -> None:
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
+
+                kernel.shutdown()
 
                 running = False
 

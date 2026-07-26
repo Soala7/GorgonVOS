@@ -6,7 +6,7 @@ from bridge.shell_bridge import ShellBridge
 
 class TerminalWindow(Window):
 
-    def __init__(self):
+    def __init__(self, service_manager):
         # 1. Initialize the base Window class first
         super().__init__(
             title="Terminal",
@@ -36,7 +36,9 @@ class TerminalWindow(Window):
             "",
         ]
         self.current_input = ""
-        self.shell = ShellBridge()
+        self.shell = ShellBridge(
+            service_manager
+        )
         # Cursor blinking mechanics
         self.cursor_visible = True
         self.cursor_timer = 0.0
@@ -160,14 +162,25 @@ class TerminalWindow(Window):
             wh - title_bar_height - border_thickness,
         )
 
-        # 3. Paint dark canvas
+        # 3. Paint dark canvas with transparency and dynamic corners
+        # Safely check if the window is maximized (using standard property names)
+        is_maximized = getattr(self, "maximized", getattr(self, "is_maximized", False))
+        corner_radius = 0 if is_maximized else 10
+
+        # Create an alpha-supported surface for transparency
+        canvas_surface = pygame.Surface((client_rect.width, client_rect.height), pygame.SRCALPHA)
+        
         pygame.draw.rect(
-            surface,
-            (20, 20, 22),  
-            client_rect,
-            border_bottom_left_radius=10,
-            border_bottom_right_radius=10,
+            canvas_surface,
+            (20, 20, 22, 20),  # 215 is the alpha transparency level (0-255)
+            canvas_surface.get_rect(),
+            border_bottom_left_radius=corner_radius,
+            border_bottom_right_radius=corner_radius,
         )
+        
+        # Blit the transparent surface onto the main screen
+        surface.blit(canvas_surface, (client_rect.x, client_rect.y))
+
 
         # 4. Calculate bounded vertical layout limits
         # Determine maximum capacity of text rows inside window layout frame
