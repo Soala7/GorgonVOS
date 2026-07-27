@@ -172,7 +172,7 @@ class TerminalWindow(Window):
         
         pygame.draw.rect(
             canvas_surface,
-            (20, 20, 22, 20),  # 215 is the alpha transparency level (0-255)
+            (20, 20, 22, 10),  # 215 is the alpha transparency level (0-255)
             canvas_surface.get_rect(),
             border_bottom_left_radius=corner_radius,
             border_bottom_right_radius=corner_radius,

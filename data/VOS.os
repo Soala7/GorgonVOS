@@ -2,7 +2,6 @@
     "name": "/",
     "files": {
         "hello.txt": "Hello from saved VOS",
-        "saved.txt": "Persistence works",
         "test.txt": ""
     },
     "folders": {
@@ -33,7 +32,38 @@
                 "guest": {
                     "name": "guest",
                     "files": {},
-                    "folders": {}
+                    "folders": {
+                        "Desktop": {
+                            "name": "Desktop",
+                            "files": {},
+                            "folders": {}
+                        },
+                        "Documents": {
+                            "name": "Documents",
+                            "files": {},
+                            "folders": {}
+                        },
+                        "Downloads": {
+                            "name": "Downloads",
+                            "files": {},
+                            "folders": {}
+                        },
+                        "Pictures": {
+                            "name": "Pictures",
+                            "files": {},
+                            "folders": {}
+                        },
+                        "Videos": {
+                            "name": "Videos",
+                            "files": {},
+                            "folders": {}
+                        },
+                        "Music": {
+                            "name": "Music",
+                            "files": {},
+                            "folders": {}
+                        }
+                    }
                 }
             }
         }

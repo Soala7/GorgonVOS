@@ -176,7 +176,9 @@ class Dock(Widget):
                 # Explorer
                 elif i == 2:
                     if self.explorer:
+
                         self.explorer.open()
+                        
                         print("[Dock] Explorer")
 
                 # Music

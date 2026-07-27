@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" width="180" alt="VOS Logo">
+  <img src="assets/logo.svg" width="180" alt="VOS Logo">
 </p>
 
 <h1 align="center">Virtual Operating System (VOS)</h1>
