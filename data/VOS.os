@@ -1,9 +1,6 @@
 {
     "name": "/",
-    "files": {
-        "hello.txt": "Hello from saved VOS",
-        "test.txt": ""
-    },
+    "files": {},
     "folders": {
         "apps": {
             "name": "apps",
@@ -33,33 +30,90 @@
                     "name": "guest",
                     "files": {},
                     "folders": {
-                        "Desktop": {
-                            "name": "Desktop",
-                            "files": {},
-                            "folders": {}
-                        },
                         "Documents": {
                             "name": "Documents",
-                            "files": {},
-                            "folders": {}
+                            "files": {
+                                "readme.txt": "Welcome to VOS!",
+                                "notes.txt": "Explorer test"
+                            },
+                            "folders": {
+                                "School": {
+                                    "name": "School",
+                                    "files": {},
+                                    "folders": {}
+                                },
+                                "AI": {
+                                    "name": "AI",
+                                    "files": {},
+                                    "folders": {}
+                                },
+                                "Projects": {
+                                    "name": "Projects",
+                                    "files": {},
+                                    "folders": {}
+                                }
+                            }
                         },
                         "Downloads": {
                             "name": "Downloads",
-                            "files": {},
-                            "folders": {}
+                            "files": {
+                                "setup.exe": "",
+                                "text.txt": "",
+                                "delete.txt": "",
+                                "New_File_4.txt": ""
+                            },
+                            "folders": {
+                                "Installers": {
+                                    "name": "Installers",
+                                    "files": {},
+                                    "folders": {}
+                                }
+                            }
                         },
                         "Pictures": {
                             "name": "Pictures",
-                            "files": {},
-                            "folders": {}
+                            "files": {
+                                "photo.png": ""
+                            },
+                            "folders": {
+                                "Wallpapers": {
+                                    "name": "Wallpapers",
+                                    "files": {},
+                                    "folders": {}
+                                }
+                            }
                         },
                         "Videos": {
                             "name": "Videos",
-                            "files": {},
-                            "folders": {}
+                            "files": {
+                                "demo.mp4": ""
+                            },
+                            "folders": {
+                                "Movies": {
+                                    "name": "Movies",
+                                    "files": {},
+                                    "folders": {}
+                                }
+                            }
                         },
                         "Music": {
                             "name": "Music",
+                            "files": {},
+                            "folders": {
+                                "Albums": {
+                                    "name": "Albums",
+                                    "files": {},
+                                    "folders": {}
+                                }
+                            }
+                        },
+                        "Storage": {
+                            "name": "Storage",
+                            "files": {},
+                            "folders": {}
+                        },
+                        "Trash": {
+                            "name": "Trash",
                             "files": {},
                             "folders": {}
                         }

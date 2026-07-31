@@ -57,8 +57,13 @@ class Window(Panel):
 
         self.font = pygame.font.SysFont("arial", 18, bold=True)
 
+    # In your Desktop / OS main update loop:
     def update(self, dt):
-        pass
+        # Reset cursor to default each frame so widgets must actively claim hover states
+        cursor_manager.set(cursor_manager.DEFAULT)
+
+        for widget in self.widgets:
+            widget.update(dt)
 
     def _get_button_rects(self, x, y, w):
         """Helper to guarantee matching layout hitboxes for draw and events."""
@@ -159,6 +164,7 @@ class Window(Panel):
         self.maximized = False
 
     def close(self):
+        cursor_manager.set(cursor_manager.DEFAULT)
         self.closed = True
         self.destroy()
 
@@ -238,17 +244,34 @@ class Window(Panel):
             self.resize_edge = None
 
         elif isinstance(event, MouseMoveEvent):
-            # Only track systemic cursor icons if not locked into an action
+            # Check if mouse is inside this window's bounds
+            in_window = x <= event.x <= x + w and y <= event.y <= y + h
+
+            # Only track systemic cursor icons if not actively dragging or resizing
             if not self.dragging and not self.resizing:
-                edge = self.get_resize_edge(event.x, event.y)
-                if edge in ("left", "right"):
-                    cursor_manager.set(cursor_manager.RESIZE_H)
-                elif edge in ("top", "bottom"):
-                    cursor_manager.set(cursor_manager.RESIZE_V)
-                elif edge is not None:
-                    cursor_manager.set(cursor_manager.RESIZE_D)
-                else:
+                if not in_window:
                     cursor_manager.set(cursor_manager.DEFAULT)
+                else:
+                    edge = self.get_resize_edge(event.x, event.y)
+                    close_rect, maximize_rect, minimize_rect = self._get_button_rects(x, y, w)
+                    
+                    # Strictly limit titlebar move region to the draggable bar area (excluding buttons)
+                    titlebar_rect = pygame.Rect(x, y, minimize_rect.x - x, self.TITLEBAR_HEIGHT)
+
+                    if edge in ("left", "right"):
+                        cursor_manager.set(cursor_manager.RESIZE_H)
+                    elif edge in ("top", "bottom"):
+                        cursor_manager.set(cursor_manager.RESIZE_V)
+                    elif edge in ("top_left", "bottom_right"):
+                        cursor_manager.set(cursor_manager.RESIZE_L)
+                    elif edge in ("top_right", "bottom_left"):
+                        cursor_manager.set(cursor_manager.RESIZE_R)
+                    elif close_rect.collidepoint(event.x, event.y) or maximize_rect.collidepoint(event.x, event.y) or minimize_rect.collidepoint(event.x, event.y):
+                        cursor_manager.set(cursor_manager.POINTER)
+                    elif titlebar_rect.collidepoint(event.x, event.y) and self.draggable and not self.maximized:
+                        cursor_manager.set(cursor_manager.MOVE)
+                    else:
+                        cursor_manager.set(cursor_manager.DEFAULT)
 
             # Process window resizing transformations
             if self.resizing:

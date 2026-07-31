@@ -64,6 +64,55 @@ class FileSystem:
 
         # Default user
         self.create_folder("/users/guest")
+        self.create_folder("/users/guest/Documents")
+        self.create_folder("/users/guest/Downloads")
+        self.create_folder("/users/guest/Pictures")
+        self.create_folder("/users/guest/Videos")
+        self.create_folder("/users/guest/Music")
+        self.create_folder("/users/guest/Storage")
+        self.create_folder("/users/guest/Trash")
+        self.create_folder("/users/guest/Documents/School")
+        self.create_folder("/users/guest/Documents/AI")
+        self.create_folder("/users/guest/Documents/Projects")
+
+        self.create_folder("/users/guest/Downloads/Installers")
+        self.create_folder("/users/guest/Pictures/Wallpapers")
+        self.create_folder("/users/guest/Videos/Movies")
+        self.create_folder("/users/guest/Music/Albums")
+        self.create_file(
+            "/users/guest/Documents/readme.txt",
+            "Welcome to VOS!"
+        )
+        self.create_file(
+            "/users/guest/Documents/notes.txt",
+            "Explorer test"
+        )
+        self.create_file(
+            "/users/guest/Downloads/setup.exe"
+        )
+        self.create_file(
+            "/users/guest/Pictures/photo.png"
+        )
+        self.create_file(
+            "/users/guest/Videos/demo.mp4"
+        )
+        self.create_file(
+            "/users/guest/Documents/readme.txt",
+            "Welcome to VOS!"
+        )
+
+        self.create_file(
+            "/users/guest/Documents/todo.txt",
+            "Finish Explorer"
+        )
+
+        self.create_file(
+            "/users/guest/Downloads/setup.zip"
+        )
+
+        self.create_file(
+            "/users/guest/Pictures/image.png"
+        )
 
     def get_current_path(self):
 
@@ -596,10 +645,32 @@ class FileSystem:
 
 
         return current
-    
+    def get_special_folder(self, key):
+        """
+        Returns one of the predefined VOS folders.
+        """
+
+        mapping = {
+            "explorer/documents": "/users/guest/Documents",
+            "explorer/downloads": "/users/guest/Downloads",
+            "explorer/photo": "/users/guest/Pictures",
+            "explorer/videos": "/users/guest/Videos",
+            "explorer/musics": "/users/guest/Music",
+            "explorer/storages": "/",
+            "explorer/trashs": "/users/guest/Trash",
+            "explorer/computer": "/",
+        }
+
+        path = mapping.get(key)
+
+        if path is None:
+            return None
+
+        return self._get_folder(path)
+
     def save(self):
 
         self.storage.save(
             self.root,
             self.save_path
-        )
+        )        

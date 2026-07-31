@@ -9,9 +9,11 @@ class CursorManager:
     POINTER = "pointer"
     TEXT = "text"
     BUSY = "busy"
+    MOVE = "move"
     RESIZE_H = "resize_h"
     RESIZE_V = "resize_v"
-    RESIZE_D = "resize_d"
+    RESIZE_L = "resize_l"
+    RESIZE_R = "resize_r"
 
     CURSOR_SIZE = 28
 
@@ -22,9 +24,11 @@ class CursorManager:
             self.POINTER: self._load("assets/cursor/cursor_pointer.png"),
             self.TEXT: self._load("assets/cursor/cursor_text.png"),
             self.BUSY: self._load("assets/cursor/cursor_busy.png"),
+            self.MOVE: self._load("assets/cursor/cursor_move.png"),
             self.RESIZE_H: self._load("assets/cursor/cursor_resize_h.png"),
             self.RESIZE_V: self._load("assets/cursor/cursor_resize_v.png"),
-            self.RESIZE_D: self._load("assets/cursor/cursor_resize_d.png"),
+            self.RESIZE_L: self._load("assets/cursor/cursor_resize_l.png"),
+            self.RESIZE_R: self._load("assets/cursor/cursor_resize_r.png"),
         }
 
         self.current = self.DEFAULT

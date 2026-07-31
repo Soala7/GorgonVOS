@@ -1,5 +1,6 @@
 """
 Gorgon OS (VOS)
+# In main.py or desktop creation code
 
 Main Entry Point
 """
@@ -10,12 +11,20 @@ import pygame
 
 from desktop.boot.boot_manager import BootManager
 from desktop.renderer.pygame_renderer import PygameRenderer
+from desktop.ui.window.window_manager import WindowManager
+from apps.explorer.explorer_window import ExplorerWindow
 from kernel.kernel import Kernel
 
 WIDTH = 1600
 HEIGHT = 900
 FPS = 60
 
+# Create window manager
+window_manager = WindowManager()
+
+# Create explorer with window_manager
+explorer = ExplorerWindow(window_manager)
+window_manager.add_window(explorer)
 
 def main() -> None:
 
