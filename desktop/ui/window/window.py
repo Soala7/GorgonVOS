@@ -7,10 +7,8 @@ Window widget.
 from __future__ import annotations
 
 import pygame
-
 from desktop.ui.widgets.panel import Panel
 from desktop.cursor.cursor_manager import cursor_manager
-
 class Window(Panel):
 
     TITLEBAR_HEIGHT = 38
@@ -54,8 +52,7 @@ class Window(Panel):
         self.target_x = self.transform.position.x
         self.target_y = self.transform.position.y
         self.titlebar_height = 38
-
-        self.font = pygame.font.SysFont("arial", 18, bold=True)
+        self.font = pygame.font.SysFont("DejaVu Sans Mono", 18, bold=True)
 
     # In your Desktop / OS main update loop:
     def update(self, dt):

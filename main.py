@@ -1,6 +1,5 @@
 """
 Gorgon OS (VOS)
-# In main.py or desktop creation code
 
 Main Entry Point
 """
@@ -19,86 +18,73 @@ WIDTH = 1600
 HEIGHT = 900
 FPS = 60
 
-# Create window manager
-window_manager = WindowManager()
-
-# Create explorer with window_manager
-explorer = ExplorerWindow(window_manager)
-window_manager.add_window(explorer)
 
 def main() -> None:
 
+    # -----------------------------
+    # Initialize Pygame FIRST
+    # -----------------------------
     pygame.init()
-    pygame.mouse.set_visible(False)
 
+    pygame.mouse.set_visible(False)
     pygame.display.set_caption("Gorgon VOS")
 
     screen = pygame.display.set_mode(
-        (
-            WIDTH,
-            HEIGHT,
-        ),
+        (WIDTH, HEIGHT),
         pygame.RESIZABLE,
     )
 
     # -----------------------------
+    # Window Manager
+    # -----------------------------
+    window_manager = WindowManager()
+
+    explorer = ExplorerWindow()
+    window_manager.add_window(explorer)
+
+    # -----------------------------
     # Start VOS Kernel
     # -----------------------------
-
     kernel = Kernel()
-
     kernel.boot()
 
     # -----------------------------
-    # Start graphics system
+    # Graphics
     # -----------------------------
-
     clock = pygame.time.Clock()
-
     renderer = PygameRenderer(screen)
 
-
+    # -----------------------------
+    # Boot Manager
+    # -----------------------------
     boot = BootManager(kernel)
 
-
     running = True
-
 
     while running:
 
         dt = clock.tick(FPS) / 1000
 
-
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
-
                 kernel.shutdown()
-
                 running = False
 
             else:
-
                 boot.handle_event(event)
-
 
         boot.update(dt)
 
-
         renderer.begin_frame()
-
-        renderer.clear(
-            (18,18,18)
-        )
+        renderer.clear((18, 18, 18))
 
         boot.draw(renderer)
 
         renderer.end_frame()
 
-
     pygame.quit()
 
 
 if __name__ == "__main__":
-
     main()
