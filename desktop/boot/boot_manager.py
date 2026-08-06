@@ -87,10 +87,7 @@ class BootManager:
     # Draw
     # --------------------------------------------------
 
-    def draw(
-        self,
-        renderer,
-    ) -> None:
+    def draw(self,renderer,) -> None:
 
         if self.state == self.BOOT:
 
@@ -111,10 +108,7 @@ class BootManager:
     # Events
     # --------------------------------------------------
 
-    def handle_event(
-        self,
-        event,
-    ) -> None:
+    def handle_event(self,event,) -> None:
 
         if self.state == self.LOGIN:
 

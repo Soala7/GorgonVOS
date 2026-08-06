@@ -34,6 +34,7 @@ class Dock(Widget):
         self.browser = None
         self.explorer = None
         self.terminal = None
+        self.text_editor = None
         self.visible = False
         self.animating = False
 
@@ -187,6 +188,9 @@ class Dock(Widget):
 
                 # Notes
                 elif i == 4:
+                    if self.text_editor:
+                        self.text_editor.open()
+                    
                     print("[Dock] Notes")
 
                 # Terminal

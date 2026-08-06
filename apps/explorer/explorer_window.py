@@ -498,6 +498,31 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
                 return
             y += spacing_y
 
+    # apps/explorer/explorer_window.py
+
+    def _on_file_double_click(self, selected_item):
+        """Triggered when an item in the file view is double-clicked."""
+        
+        # 1. Ensure the item is a file (not a directory)
+        if getattr(selected_item, "is_directory", False):
+            self.navigate_to(selected_item.path)
+            return
+
+        # 2. Extract the VirtualFile instance
+        virtual_file = getattr(selected_item, "file_object", selected_item)
+
+        # 3. Check for supported text formats
+        file_name = getattr(virtual_file, "name", "")
+        if file_name.endswith((".txt", ".md", ".py", ".json", ".csv", ".log")) or not "." in file_name:
+            
+            # Launch or retrieve an Editor instance via Desktop / AppLauncher
+            editor_window = self.desktop.launch_app("Text Editor")
+            
+            # Pass the VirtualFile to open_virtual_file()
+            if editor_window:
+                editor_window.open_virtual_file(virtual_file)
+                self.desktop.window_manager.focus_window(editor_window)
+
     def _handle_folder_item_click(self, rel_x, rel_y, scale):
         """Handle clicks on folder items (single/double click)"""
         clicked_item = None
@@ -539,3 +564,21 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
             self.selected_item = None
             self.last_clicked = None
             self.last_click_time = 0.0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            

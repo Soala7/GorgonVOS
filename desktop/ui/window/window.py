@@ -30,6 +30,7 @@ class Window(Panel):
 
         self.title = title
         self.transform.resize(width, height)
+        self.widgets = []
 
         self.minimized = False
         self.maximized = False
@@ -297,3 +298,24 @@ class Window(Panel):
                 self.transform.position.y = event.y - self.drag_offset_y
                 event.handled = True
                 return
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                

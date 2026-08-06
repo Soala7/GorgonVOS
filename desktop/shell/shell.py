@@ -10,6 +10,7 @@ from desktop.renderer import renderer
 from desktop.shell.desktop import Desktop
 from apps.terminal.terminal import Terminal
 from apps.explorer.explorer import Explorer
+from apps.editor.editor import TextEditor
 class Shell:
     """
     Main desktop shell.
@@ -23,16 +24,21 @@ class Shell:
 
         self.explorer = Explorer()
 
+        self.text_editor = TextEditor(service_manager)
+
         self.service_manager = service_manager
 
         self.terminal.window_manager = self.desktop.window_manager
 
         self.explorer.window_manager = self.desktop.window_manager
 
+        self.text_editor.window_manager = self.desktop.window_manager
+
         # Give desktop components access
         self.desktop.dock.launcher = self.desktop.launcher
         self.desktop.dock.terminal = self.terminal
         self.desktop.dock.explorer = self.explorer
+        self.desktop.dock.text_editor = self.text_editor
 
     # --------------------------------------------------
     # Update

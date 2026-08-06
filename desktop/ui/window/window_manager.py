@@ -6,6 +6,8 @@ Window Manager
 
 from __future__ import annotations
 
+import pygame
+
 from desktop.ui.window.window import Window
 
 
@@ -104,12 +106,54 @@ class WindowManager:
     # Events
     # --------------------------------------------------
 
+    # --------------------------------------------------
+    # Events
+    # --------------------------------------------------
+
     def handle_event(self, event) -> None:
+
+        # ----------------------------------------
+        # Keyboard events
+        # ----------------------------------------
+
+        if hasattr(event, "key"):
+
+            if (
+                self.active_window
+                and not self.active_window.closed
+                and not self.active_window.minimized
+            ):
+
+                self.active_window.handle_event(event)
+
+            return
+
+        # ----------------------------------------
+        # Mouse events
+        # ----------------------------------------
 
         for window in reversed(self.windows):
 
             window.handle_event(event)
 
             if getattr(event, "handled", False):
+
                 self.focus_window(window)
+
                 break
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            

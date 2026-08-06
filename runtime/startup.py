@@ -80,6 +80,7 @@ class StartupManager:
         app_manager.register_app("calculator", lambda: print("Calculator started"))
         app_manager.register_app("terminal", lambda: print("Terminal started"))
         app_manager.register_app("explorer", lambda: print("File Explorer started"))
+        app_manager.register_app("text_editor", lambda: print("Text Editor started"))
 
     # ----------------------------
     # DESKTOP BOOT
