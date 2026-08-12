@@ -1,4 +1,5 @@
 import pygame
+
 from resources.cache import ResourceCache
 from resources.paths import (
     BOOT,
@@ -7,16 +8,13 @@ from resources.paths import (
     WALLPAPERS,
 )
 
-
 class AssetManager:
-    """Loads and caches image assets."""
-
+    #Loads and caches image assets.
     def __init__(self):
         self.cache = ResourceCache()
 
     def load_image(self, path):
         path = str(path)
-
         if path not in self.cache.images:
             self.cache.images[path] = pygame.image.load(path).convert_alpha()
 

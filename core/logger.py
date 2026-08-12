@@ -1,7 +1,7 @@
 from datetime import datetime
 
 class Logger:
-    def __init__(self, name="VOS"):
+    def __init__(self, name = "VOS"):
         self.name = name
 
     def _format(self, level, message):

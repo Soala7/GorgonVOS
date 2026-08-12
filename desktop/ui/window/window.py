@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pygame
 from desktop.ui.widgets.panel import Panel
-from desktop.cursor.cursor_manager import cursor_manager
+from resources.cursor_manager import cursor_manager
 class Window(Panel):
 
     TITLEBAR_HEIGHT = 38

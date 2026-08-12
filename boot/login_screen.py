@@ -61,13 +61,13 @@ class LoginScreen:
         renderer.clear((22, 24, 30))
 
         title_font = pygame.font.SysFont(
-            "arial",
+            "DejaVu Sans Mono",
             48,
             bold=True,
         )
 
         text_font = pygame.font.SysFont(
-            "arial",
+            "DejaVu Sans Mono",
             24,
         )
 

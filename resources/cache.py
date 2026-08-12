@@ -1,6 +1,5 @@
 class ResourceCache:
-    """Caches loaded resources to avoid reloading them."""
-
+    #Caches loaded resources to avoid reloading them.
     def __init__(self):
         self.images = {}
         self.fonts = {}

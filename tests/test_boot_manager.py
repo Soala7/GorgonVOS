@@ -1,6 +1,6 @@
 import time
 
-from desktop.boot.boot_manager import BootManager
+from boot.boot_manager import BootManager
 
 
 class DummyRenderer:

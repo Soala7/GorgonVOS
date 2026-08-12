@@ -1,4 +1,4 @@
-from desktop.boot.login_screen import LoginScreen
+from boot.login_screen import LoginScreen
 
 
 def main():

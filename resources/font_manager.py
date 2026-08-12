@@ -5,8 +5,7 @@ from resources.paths import FONTS
 
 
 class FontManager:
-    """Loads and caches fonts."""
-
+    #Loads and caches fonts.
     def __init__(self):
         self.cache = ResourceCache()
 

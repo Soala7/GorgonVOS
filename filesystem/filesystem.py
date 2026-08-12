@@ -22,229 +22,114 @@ class FileSystem:
                 )
             )
         
-        self.save_path = os.path.join(
-            base_path,
-            "data",
-            "VOS.os"
-        )
+        self.save_path = os.path.join(base_path,"data","VOS.os")
 
-        loaded = self.storage.load(
-            self.save_path
-        )
-
+        loaded = self.storage.load(self.save_path)
 
         if loaded:
-
-            print("[FILESYSTEM] Restoring saved filesystem")
-
             self.root = loaded
 
         else:
-
-            print(
-                "[FILESYSTEM] Creating new filesystem"
-            )
-
             self.root = Folder("/")
-
             self._create_default_structure()
 
-
         self.current_directory = self.root
+
+    def _default_directories(self):
+        directories = ["apps","home","system", "temp", "users"]
+        for dir in directories:
+            dirs = "/" + dir
+            self.create_folder(dirs)
+
+    def _default_user_directories(self):
+        user_directory = ["Documents", "Downloads", "Pictures", "Videos", "Music", "Storage", "Trash"]
+        for users in user_directory:
+            user_dirs = "/users/guest/" + users
+            self.create_folder(user_dirs)
+        
+    def _default_temp_directories(self):
+        temp_directory = []
+        for temp in temp_directory:
+            temp_dirs = "/temp/" + temp
+            self.create_folder(temp_dirs)
+    #i think apps wi;; be different but how  ?             
     def _create_default_structure(self):
-        """
-        Creates the default VOS directory structure.
-        """
-
-        self.create_folder("/apps")
-        self.create_folder("/home")
-        self.create_folder("/system")
-        self.create_folder("/temp")
-        self.create_folder("/users")
-
-        # Default user
-        self.create_folder("/users/guest")
-        self.create_folder("/users/guest/Documents")
-        self.create_folder("/users/guest/Downloads")
-        self.create_folder("/users/guest/Pictures")
-        self.create_folder("/users/guest/Videos")
-        self.create_folder("/users/guest/Music")
-        self.create_folder("/users/guest/Storage")
-        self.create_folder("/users/guest/Trash")
-        self.create_folder("/users/guest/Documents/School")
-        self.create_folder("/users/guest/Documents/AI")
-        self.create_folder("/users/guest/Documents/Projects")
-
-        self.create_folder("/users/guest/Downloads/Installers")
-        self.create_folder("/users/guest/Pictures/Wallpapers")
-        self.create_folder("/users/guest/Videos/Movies")
-        self.create_folder("/users/guest/Music/Albums")
-        self.create_file(
-            "/users/guest/Documents/readme.txt",
-            "Welcome to VOS!"
-        )
-        self.create_file(
-            "/users/guest/Documents/notes.txt",
-            "Explorer test"
-        )
-        self.create_file(
-            "/users/guest/Downloads/setup.exe"
-        )
-        self.create_file(
-            "/users/guest/Pictures/photo.png"
-        )
-        self.create_file(
-            "/users/guest/Videos/demo.mp4"
-        )
-        self.create_file(
-            "/users/guest/Documents/readme.txt",
-            "Welcome to VOS!"
-        )
-
-        self.create_file(
-            "/users/guest/Documents/todo.txt",
-            "Finish Explorer"
-        )
-
-        self.create_file(
-            "/users/guest/Downloads/setup.zip"
-        )
-
-        self.create_file(
-            "/users/guest/Pictures/image.png"
-        )
+        self._default_user_directories()
+        self._default_directories()
+        #Creates the default VOS directory structure
+        #omo this one no go hard right ?
+        self.create_file("/users/guest/Documents/readme.txt","Welcome to VOS!")
+        self.create_file("/users/guest/Documents/notes.txt","Explorer test")
+        self.create_file("/users/guest/Downloads/setup.exe")
+        self.create_file("/users/guest/Videos/demo.mp4")
+        self.create_file("/users/guest/Documents/readme.txt","Welcome to VOS!")
+        self.create_file("/users/guest/Documents/todo.txt","Finish Explorer")
+        self.create_file("/users/guest/Downloads/setup.zip")
 
     def get_current_path(self):
-
         path = []
-
         current = self.current_directory
-
-
         while current.parent is not None:
-
             path.append(current.name)
-
             current = current.parent
-
-
-        return "/" + "/".join(
-            reversed(path)
-        )
+        return "/" + "/".join(reversed(path))
     
     def create_folder(self, path):
         """
         Creates a folder at the given path.
         Supports both absolute and relative paths.
         """
-
         print(f"[FILESYSTEM] create folder request: {path}")
-
-
         if path.startswith("/"):
             current = self.root
         else:
             current = self.current_directory
 
-
         parts = self._split_path(path)
 
-
         for part in parts:
-
             if part not in current.folders:
-
-                new_folder = Folder(
-                    part,
-                    parent=current
-                )
-
-                current.add_folder(
-                    new_folder
-                )
-
-                print(
-                    f"[FILESYSTEM] created folder: {part}"
-                )
-
-
+                new_folder = Folder(part,parent=current)
+                current.add_folder(new_folder)
+                print(f"[FILESYSTEM] created folder: {part}")
             current = current.folders[part]
 
-
         if self.event_bus:
-            self.event_bus.emit(
-                "folder_created",
-                {"path": path}
-            )
-
+            self.event_bus.emit("folder_created",{"path": path})
 
         return True
 
     def create_file(self, path, content=""):
-        """
-        Creates a file in the current directory or specified path.
-        """
-
+        #Creates a file in the current directory or specified path.
         print(f"[FILESYSTEM] create file request: {path}")
-
-
         parts = self._split_path(path)
-
-
         filename = parts.pop()
-
 
         if path.startswith("/"):
             current = self.root
         else:
             current = self.current_directory
-
-
 
         # Move into target folder if needed
         for part in parts:
 
             if part not in current.folders:
-                print(
-                    "[FILESYSTEM] folder not found:",
-                    part
-                )
+                print("[FILESYSTEM] folder not found:",part)
                 return False
 
-
             current = current.folders[part]
-
-
-
         # Check existing file
         if filename in current.files:
-
-            print(
-                "[FILESYSTEM] file already exists"
-            )
+            print("[FILESYSTEM] file already exists")
 
             return False
 
-
-
-        current.add_file(
-            filename,
-            content
-        )
-
-
-        print(
-            f"[FILESYSTEM] created file: {filename}"
-        )
-
-
+        current.add_file(filename,content)
+        print(f"[FILESYSTEM] created file: {filename}")
         return True
 
     def change_directory(self, path):
-        """
-        Changes the current working directory.
-        """
-
+        #Changes the current working directory.
         print("[FILESYSTEM] cd request:", path)
 
         # Parent directory
@@ -254,7 +139,6 @@ class FileSystem:
                 self.current_directory = self.current_directory.parent
 
             return True
-
 
         # Root directory
         if path == "/":

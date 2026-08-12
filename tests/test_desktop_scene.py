@@ -1,4 +1,4 @@
-from desktop.boot.desktop_scene import DesktopScene
+from boot.desktop_scene import DesktopScene
 
 
 class DummyRenderer:

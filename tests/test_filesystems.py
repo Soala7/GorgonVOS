@@ -1,4 +1,4 @@
-from filesystem import FileSystem
+from filesystem.filesystem import FileSystem
 
 fs = FileSystem()
 

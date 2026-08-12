@@ -8,10 +8,10 @@ from __future__ import annotations
 
 import pygame
 
-from desktop.boot.boot_screen import BootScreen
-from desktop.boot.login_screen import LoginScreen
+from boot.boot_screen import BootScreen
+from boot.login_screen import LoginScreen
 from desktop.shell.shell import Shell
-from desktop.cursor.cursor_manager import cursor_manager
+from resources.cursor_manager import cursor_manager
 from desktop.ui.core.event import (
     KeyPressEvent,
     KeyReleaseEvent,
@@ -25,10 +25,7 @@ from desktop.ui.core.event import (
 
 
 class BootManager:
-    """
-    Controls the startup sequence of Gorgon OS.
-    """
-
+    #Controls the startup sequence of Gorgon OS.
     BOOT = "boot"
     LOGIN = "login"
     DESKTOP = "desktop"
@@ -41,9 +38,7 @@ class BootManager:
 
         self.login_screen = LoginScreen()
 
-        self.shell = Shell(
-            kernel.service_manager
-        )
+        self.shell = Shell(kernel.service_manager)
 
         self.cursor = cursor_manager
 
@@ -88,15 +83,15 @@ class BootManager:
     # --------------------------------------------------
 
     def draw(self,renderer,) -> None:
-
+        #Draw Boot
         if self.state == self.BOOT:
 
             self.boot_screen.draw(renderer)
-
+        #Draws Login
         elif self.state == self.LOGIN:
 
             self.login_screen.draw(renderer)
-
+        #Draw Desktop
         elif self.state == self.DESKTOP:
 
             self.shell.draw(renderer)
@@ -132,8 +127,6 @@ class BootManager:
 
     def _convert_pygame_event(self, event):
 
-        import pygame
-
         if event.type == pygame.MOUSEMOTION:
             return MouseMoveEvent(event.pos[0], event.pos[1])
 
@@ -164,22 +157,17 @@ class BootManager:
         return None
 
     def _map_button(self, button):
-
-        if button == 1:
-            return MouseButton.LEFT
-        if button == 2:
-            return MouseButton.MIDDLE
-        if button == 3:
-            return MouseButton.RIGHT
-        if button == 4:
-            return MouseButton.X1
-        if button == 5:
-            return MouseButton.X2
+        #REPORTS TO _convert_pygame_event
+        match button:
+            case 1: return MouseButton.LEFT
+            case 2: return MouseButton.MIDDLE
+            case 3: return MouseButton.RIGHT
+            case 4: return MouseButton.X1
+            case 5: return MouseButton.X2
 
         return MouseButton.NONE
 
     def _map_modifiers(self, mods):
-
         if mods & pygame.KMOD_CTRL:
             return KeyModifier.CTRL
         if mods & pygame.KMOD_SHIFT:

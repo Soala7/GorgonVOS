@@ -12,11 +12,7 @@ import pygame
 
 class BootScreen:
 
-    def __init__(
-        self,
-        logo=None,
-        duration: float = 3.0,
-    ) -> None:
+    def __init__(self,logo=None,duration: float = 3.0,) -> None:
 
         self.logo = logo
 
@@ -63,10 +59,7 @@ class BootScreen:
     # Draw
     # --------------------------------------------------
 
-    def draw(
-        self,
-        renderer,
-    ) -> None:
+    def draw(self,renderer) -> None:
 
         surface = renderer.surface
 
@@ -77,19 +70,15 @@ class BootScreen:
         renderer.clear((14, 14, 18))
 
         font = pygame.font.SysFont(
-            "arial",
+            "DejaVu Sans Mono",
             72,
             bold=True,
+            italic = True
         )
 
-        renderer.draw_text(
-            "GORGON",
-            font,
-            (255, 255, 255),
-            pygame.Vector2(
+        renderer.draw_text("GORGON",font,(255, 255, 255),pygame.Vector2(
                 width // 2,
-                height // 2 - 40,
-            ),
+                height // 2 - 40),
             align="center",
         )
 
@@ -105,9 +94,7 @@ class BootScreen:
             border_radius=8,
         )
 
-        pygame.draw.rect(
-            surface,
-            (30, 180, 255),
+        pygame.draw.rect(surface,(30, 180, 255),
             (
                 width // 2 - 200,
                 height // 2 + 40,

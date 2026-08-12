@@ -6,10 +6,7 @@ from resources.theme_manager import ThemeManager
 
 
 class ResourceManager:
-    """
-    Central access point for every resource in VOS.
-    """
-
+    #Central access point for every resource in VOS.
     def __init__(self):
 
         self.assets = AssetManager()

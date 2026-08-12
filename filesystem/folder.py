@@ -1,10 +1,7 @@
 """
 VOS Virtual Filesystem
-
 Folder representation.
 """
-
-
 class Folder:
 
     def __init__(self, name, parent=None):

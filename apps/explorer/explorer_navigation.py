@@ -2,10 +2,10 @@
 """Navigation logic for Explorer"""
 
 class ExplorerNavigation:
-    """Mixin class for navigation"""
+    #Mixin class for navigation
     
     def navigate_to(self, folder):
-        """Unified navigation method"""
+        #Unified navigation method
         target_name = getattr(folder, "name", "Computer (Dashboard)")
         print(f"[VOS] Navigating to: {target_name}")
         

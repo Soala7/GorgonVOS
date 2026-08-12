@@ -4,8 +4,7 @@ from resources.paths import THEMES
 
 
 class ThemeManager:
-    """Loads and provides access to theme settings."""
-
+    #Loads and provides access to theme settings.
     def __init__(self):
         self.theme = {}
         self.colors = {}

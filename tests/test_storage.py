@@ -1,7 +1,5 @@
 import sys
 import os
-
-
 # Add VOS root directory to Python path
 sys.path.append(
     os.path.dirname(
@@ -11,36 +9,21 @@ sys.path.append(
     )
 )
 
-
 from filesystem.filesystem import FileSystem
 from filesystem.storage import FileSystemStorage
-
-
 fs = FileSystem()
 
 fs.create_file(
     "/hello.txt",
     "Hello from saved VOS"
 )
-
-
 storage = FileSystemStorage()
 
+storage.save(fs.root,"test.os")
 
-storage.save(
-    fs.root,
-    "test.os"
-)
+loaded_root = storage.load("test.os")
 
-
-loaded_root = storage.load(
-    "test.os"
-)
-
-
-print(
-    loaded_root.files
-)
+print(loaded_root.files)
 
 fs.create_file(
     "/saved.txt",

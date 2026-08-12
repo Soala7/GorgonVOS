@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pygame
 
-from desktop.boot.boot_manager import BootManager
+from boot.boot_manager import BootManager
 from desktop.renderer.pygame_renderer import PygameRenderer
 from desktop.ui.window.window_manager import WindowManager
 from apps.explorer.explorer_window import ExplorerWindow
@@ -25,7 +25,7 @@ def main() -> None:
     # Initialize Pygame FIRST
     # -----------------------------
     pygame.init()
-
+    #Makes the cursor disapper
     pygame.mouse.set_visible(False)
     pygame.display.set_caption("Gorgon VOS")
 
@@ -49,7 +49,7 @@ def main() -> None:
     kernel.boot()
 
     # -----------------------------
-    # Graphics
+    # Graphics and Updating
     # -----------------------------
     clock = pygame.time.Clock()
     renderer = PygameRenderer(screen)
@@ -68,6 +68,7 @@ def main() -> None:
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
+                #tells logger about shutdown
                 kernel.shutdown()
                 running = False
 
@@ -77,7 +78,6 @@ def main() -> None:
         boot.update(dt)
 
         renderer.begin_frame()
-        renderer.clear((18, 18, 18))
 
         boot.draw(renderer)
 

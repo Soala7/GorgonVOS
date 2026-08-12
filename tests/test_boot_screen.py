@@ -1,6 +1,6 @@
 import time
 
-from desktop.boot.boot_screen import BootScreen
+from boot.boot_screen import BootScreen
 
 
 def main():

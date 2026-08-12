@@ -37,7 +37,7 @@ class DesktopIcons(Panel):
         surface = renderer.surface
 
         font = pygame.font.SysFont(
-            "arial",
+            "DejaVu Sans Mono",
             18,
         )
 

@@ -2,7 +2,7 @@ from resources.paths import ICONS
 
 
 class IconManager:
-    """Loads application and system icons."""
+    #Loads application and system icons.
     def __init__(self, assets):
         self.assets = assets
 
@@ -22,6 +22,4 @@ class IconManager:
         return self.assets.load_image(ICONS / "status" / filename)
 
     def explorer_tool(self, filename):
-        return self.assets.load_image(
-            ICONS / "apps" / "explorer_tools" / filename
-        )
+        return self.assets.load_image(ICONS / "apps" / "explorer_tools" / filename)
