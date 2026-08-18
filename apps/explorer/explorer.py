@@ -1,88 +1,49 @@
-"""
-VOS Explorer Application
-"""
-
 from apps.explorer.explorer_window import ExplorerWindow
-
 
 class Explorer:
 
-    def __init__(self):
+    def __init__(self, window_manager):
+        self.window_manager = window_manager
 
-        self.window = ExplorerWindow()
-
-        self.window_manager = None
-
+        self.window = ExplorerWindow(
+            window_manager=self.window_manager
+        )
 
     def open(self):
-
-        print("Opening explorer")
-
-        if not self.window_manager:
-
-            print("No WindowManager")
-            return
-
-
-        if self.window in self.window_manager.windows:
-
-            print("Already open")
-
-            if self.window_manager.active_window is self.window:
-
-                self.close()
-                return
-
-
-            self.window_manager.focus_window(
-                self.window
-            )
-
-            return
-
-
-        print("Adding window")
-
-
-        if self.window.closed:
-
-            self.window = ExplorerWindow()
-
-
-        self.window.restore()
-
-
-        self.window_manager.add_window(
-            self.window
-        )
-
-
-        self.window_manager.focus_window(
-            self.window
-        )
-
-
-    def close(self):
+        """Open the Explorer window."""
+        self.window.closed = False
+        self.window.minimized = False
+        self.window.activate()
 
         if self.window_manager:
+            if self.window not in self.window_manager.windows:
+                self.window_manager.add_window(self.window)
+            else:
+                self.window_manager.focus_window(self.window)
 
-            self.window_manager.close_window(
-                self.window
-            )
+    def close(self):
+        """Close the Explorer window."""
+        self.window.closed = True
+        self.window.deactivate()
 
+    def minimize(self):
+        """Minimize the Explorer window."""
+        self.window.minimized = True
+        self.window.deactivate()
+
+    def activate(self):
+        self.window.activate()
+
+    def deactivate(self):
+        self.window.deactivate()
 
     def update(self, dt):
-
         self.window.update(dt)
 
-
     def draw(self, renderer):
-
         self.window.draw(renderer)
 
-
     def handle_event(self, event):
-
         self.window.handle_event(event)
 
     # apps/explorer/explorer_window.py (or apps/explorer.py)

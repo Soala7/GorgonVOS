@@ -1,132 +1,139 @@
 """
-VOS Filesystem Storage
+Gorgon OS (VOS)
 
-Handles saving and loading the virtual filesystem.
+FileSystemStorage Manager
+Handles serializing, saving, and loading the virtual filesystem hierarchy
+to/from virtual disk block storage with local file system backup support.
 """
+
+from __future__ import annotations
 
 import json
 import os
+from typing import Any, Optional
 
-from .folder import Folder
+from filesystem.folder import Folder
+from filesystem.virtual_file import VirtualFile
 
 
 class FileSystemStorage:
+    """Manages filesystem state persistence and tree serialization."""
 
-    def save(self, root, path):
+    def __init__(self, disk: Any) -> None:
+        self.disk = disk
 
-        directory = os.path.dirname(path)
-
-        if directory and not os.path.exists(directory):
-            os.makedirs(directory)
-
-        data = self._folder_to_dict(root)
-
-        with open(
-            path,
-            "w",
-            encoding="utf-8"
-        ) as file:
-
-            json.dump(
-                data,
-                file,
-                indent=4
-            )
-
-        print(
-            "[STORAGE] filesystem saved:",
-            path
-        )
-
-
-    def load(self, path="VOS.os"):
+    def save(self, root: Folder, path: str = "VOS.os") -> bool:
         """
-        Loads the filesystem tree from disk.
+        Serializes the filesystem tree and writes it to the virtual disk Registry,
+        with a secondary JSON backup written to the local host filesystem path.
         """
+        if not root:
+            print("[STORAGE] Error: Cannot save null root directory.")
+            return False
 
+        try:
+            data = self._folder_to_dict(root)
+            metadata = json.dumps(data)
+            payload = metadata.encode("utf-8")
+
+            if hasattr(self.disk, "file_table") and "Registry" in self.disk.file_table:
+                if hasattr(self.disk, "delete_file"):
+                    self.disk.delete_file("Registry")
+
+            if hasattr(self.disk, "create_file"):
+                self.disk.create_file("Registry", payload)
+                print("[STORAGE] Filesystem registry written to virtual disk.")
+
+            directory = os.path.dirname(path)
+            if directory and not os.path.exists(directory):
+                os.makedirs(directory, exist_ok=True)
+
+            with open(path, "w", encoding="utf-8") as file:
+                json.dump(data, file, indent=4)
+
+            print(f"[STORAGE] Filesystem successfully backed up: {path}")
+            return True
+
+        except Exception as e:
+            print(f"[STORAGE] Save error: {e}")
+            return False
+
+    def load(self, path: str = "VOS.os") -> Optional[Folder]:
+        """
+        Restores the filesystem hierarchy. Priority is given to the virtual disk 
+        Registry file; falls back to the local backup file if unavailable.
+        """
+        # 1. Primary load: Virtual Disk Registry
+        if hasattr(self.disk, "file_table") and "Registry" in self.disk.file_table:
+            try:
+                raw_data = self.disk.read_file("Registry")
+                if isinstance(raw_data, bytes):
+                    metadata = raw_data.decode("utf-8")
+                else:
+                    metadata = str(raw_data)
+
+                data = json.loads(metadata)
+                print("[STORAGE] Filesystem loaded successfully from virtual disk.")
+                return self._dict_to_folder(data)
+            except Exception as e:
+                print(f"[STORAGE] Virtual disk loading failed: {e}. Checking backup...")
+
+        # 2. Secondary load: Local disk fallback
         if not os.path.exists(path):
-
-            print(
-                "[STORAGE] save file not found"
-            )
-
+            print(f"[STORAGE] Save backup not found: {path}")
             return None
 
+        try:
+            with open(path, "r", encoding="utf-8") as file:
+                data = json.load(file)
 
+            print(f"[STORAGE] Filesystem restored from local backup: {path}")
+            return self._dict_to_folder(data)
 
-        with open(
-            path,
-            "r",
-            encoding="utf-8"
-        ) as file:
+        except Exception as e:
+            print(f"[STORAGE] Failed to load local backup: {e}")
+            return None
 
-            data = json.load(file)
-
-
-
-        print(
-            "[STORAGE] filesystem loaded:",
-            path
-        )
-
-
-        return self._dict_to_folder(
-            data
-        )
-
-
-
-    def _folder_to_dict(self, folder):
-
+    def _folder_to_dict(self, folder: Folder) -> dict[str, Any]:
+        """Recursively converts a Folder tree into a serializable dictionary structure."""
         return {
-
-            "name": folder.name,
-
-            "files": folder.files,
-
+            "name": getattr(folder, "name", "root"),
+            "files": {
+                name: {
+                    "name": getattr(virtual_file, "name", name),
+                    "content": getattr(virtual_file, "content", ""),
+                }
+                for name, virtual_file in getattr(folder, "files", {}).items()
+            },
             "folders": {
-
-                name: self._folder_to_dict(
-                    subfolder
-                )
-
-                for name, subfolder
-                in folder.folders.items()
-
-            }
-
+                name: self._folder_to_dict(subfolder)
+                for name, subfolder in getattr(folder, "folders", {}).items()
+            },
         }
 
+    def _dict_to_folder(self, data: dict[str, Any], parent: Optional[Folder] = None) -> Folder:
+        """Recursively deserializes a dictionary structure back into a Folder hierarchy."""
+        folder_name = data.get("name", "root")
+        folder = Folder(folder_name, parent=parent)
 
+        # Reconstruct file nodes
+        for filename, file_data in data.get("files", {}).items():
+            if isinstance(file_data, dict):
+                fname = file_data.get("name", filename)
+                fcontent = file_data.get("content", "")
+            else:
+                fname = filename
+                fcontent = str(file_data)
 
-    def _dict_to_folder(self, data, parent=None):
+            virtual_file = VirtualFile(fname, fcontent)
+            folder.files[filename] = virtual_file
 
-        folder = Folder(
-            data["name"],
-            parent=parent
-        )
-
-
-        folder.files = data.get(
-            "files",
-            {}
-        )
-
-
-        for name, subfolder_data in data.get(
-            "folders",
-            {}
-        ).items():
-
-            subfolder = self._dict_to_folder(
-                subfolder_data,
-                parent=folder
-            )
-
-
-            folder.add_folder(
-                subfolder
-            )
-
+        # Reconstruct child folder nodes
+        for name, subfolder_data in data.get("folders", {}).items():
+            subfolder = self._dict_to_folder(subfolder_data, parent=folder)
+            if hasattr(folder, "add_folder"):
+                folder.add_folder(subfolder)
+            else:
+                folder.folders[name] = subfolder
 
         return folder

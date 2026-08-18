@@ -1,6 +1,5 @@
 """
 Gorgon OS (VOS)
-
 Main Entry Point
 """
 
@@ -39,7 +38,7 @@ def main() -> None:
     # -----------------------------
     window_manager = WindowManager()
 
-    explorer = ExplorerWindow()
+    explorer = ExplorerWindow(window_manager)
     window_manager.add_window(explorer)
 
     # -----------------------------

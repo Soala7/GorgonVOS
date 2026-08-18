@@ -63,7 +63,7 @@ class AppLauncher:
     def _launch_editor(self, file_path=None):
         """Launch text editor"""
         try:
-            from apps.editor.text_editor import TextEditorApp
+            from apps.editor.editor import TextEditorApp
             # If file_path provided, load content
             content = ""
             filename = "Untitled"

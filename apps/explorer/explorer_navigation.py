@@ -98,3 +98,23 @@ class ExplorerNavigation:
         self.current_folder = None
         self.current_folder = current
         print("[VOS] View refreshed")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        

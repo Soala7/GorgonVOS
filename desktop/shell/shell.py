@@ -11,6 +11,8 @@ from desktop.shell.desktop import Desktop
 from apps.terminal.terminal import Terminal
 from apps.explorer.explorer import Explorer
 from apps.editor.editor import TextEditor
+
+
 class Shell:
     """
     Main desktop shell.
@@ -22,7 +24,7 @@ class Shell:
 
         self.terminal = Terminal(service_manager)
 
-        self.explorer = Explorer()
+        self.explorer = Explorer(self.desktop.window_manager)
 
         self.text_editor = TextEditor(service_manager)
 

@@ -1,65 +1,76 @@
 # apps/explorer/explorer_operations.py
 """File operations for Explorer - Create, Delete, Rename, Open"""
-
+from filesystem.virtual_file import VirtualFile
 class ExplorerOperations:
-    """Mixin class for file operations"""
-    
+
     def create_new_file(self, filename=None):
-        """Create a new file in the current folder"""
+        """Create a new file in the current folder."""
+
         if self.current_folder is None:
             print("[VOS] Cannot create file: No folder selected")
             return False
-        
+
         if not filename:
             import time
             filename = f"NewFile_{int(time.time())}.txt"
-        
-        if hasattr(self.current_folder, 'files'):
-            if filename in self.current_folder.files:
-                print(f"[VOS] File '{filename}' already exists")
-                return False
-        
-        if hasattr(self.current_folder, 'create_file'):
-            self.current_folder.create_file(filename, "")
-        else:
-            if isinstance(self.current_folder.files, dict):
-                self.current_folder.files[filename] = ""
-            elif isinstance(self.current_folder.files, list):
-                self.current_folder.files.append(filename)
-        
-        print(f"[VOS] Created file: {filename}")
-        return True
+
+        if not hasattr(self.current_folder, "files"):
+            print("[VOS] Current folder has no file storage")
+            return False
+
+        if filename in self.current_folder.files:
+            print(f"[VOS] File '{filename}' already exists")
+            return False
+
+        if isinstance(self.current_folder.files, dict):
+            self.current_folder.files[filename] = ""
+
+            print(f"[VOS] Created file: {filename}")
+            return True
+
+        print("[VOS] Unsupported file storage type")
+        return False
 
     def create_new_folder(self, foldername=None):
-        """Create a new folder in the current directory"""
+        """Create a new folder in the current directory."""
+
         if self.current_folder is None:
             print("[VOS] Cannot create folder: No folder selected")
             return False
-        
+
         if not foldername:
             import time
             foldername = f"NewFolder_{int(time.time())}"
-        
-        if hasattr(self.current_folder, 'folders'):
-            if foldername in self.current_folder.folders:
-                print(f"[VOS] Folder '{foldername}' already exists")
-                return False
-        
-        if hasattr(self.current_folder, 'create_folder'):
-            self.current_folder.create_folder(foldername)
-        else:
-            if isinstance(self.current_folder.folders, dict):
-                self.current_folder.folders[foldername] = type('Folder', (object,), {
-                    'name': foldername,
-                    'parent': self.current_folder,
-                    'folders': {},
-                    'files': {}
-                })()
-            elif isinstance(self.current_folder.folders, list):
-                self.current_folder.folders.append(foldername)
-        
-        print(f"[VOS] Created folder: {foldername}")
-        return True
+
+        if not hasattr(self.current_folder, "folders"):
+            print("[VOS] Current folder has no folder storage")
+            return False
+
+        if foldername in self.current_folder.folders:
+            print(f"[VOS] Folder '{foldername}' already exists")
+            return False
+
+        if isinstance(self.current_folder.folders, dict):
+            from filesystem.folder import Folder
+
+            new_folder = Folder(
+                foldername,
+                parent=self.current_folder
+            )
+
+            self.current_folder.folders[foldername] = new_folder
+
+            print(f"[VOS] Created folder: {foldername}")
+            return True
+
+        elif isinstance(self.current_folder.folders, list):
+            self.current_folder.folders.append(foldername)
+
+            print(f"[VOS] Created folder: {foldername}")
+            return True
+
+        print("[VOS] Unsupported folder storage type")
+        return False
 
     def delete_item(self, item):
         """Delete a file or folder"""
@@ -180,51 +191,57 @@ class ExplorerOperations:
             self.open_in_editor(filename, content)
 
     def open_in_editor(self, filename, content=""):
-        """Open file in text editor"""
+        """Open a file in the VOS Text Editor."""
         try:
-            from apps.editor.text_editor import TextEditorApp
-            
-            file_path = self._get_file_path(filename)
-            
+            from apps.editor.editor_window import EditorWindow
+
             print(f"[VOS] Creating editor for: {filename}")
-            
-            editor = TextEditorApp(filename, content, file_path)
-            
+
+            # Create the editor window
+            editor = EditorWindow()
+
+            # Find the actual file object in the current folder
+            virtual_file = None
+
+            if hasattr(self.current_folder, "files"):
+                if isinstance(self.current_folder.files, dict):
+                    virtual_file = self.current_folder.files.get(filename)
+
+            # The current filesystem stores file content as a string.
+            # EditorWindow expects a virtual file object, so for now
+            # attach the file information directly.
+            if virtual_file is None or isinstance(virtual_file, str):
+                virtual_file = VirtualFile(filename, content)
+
+                # Make sure saving updates the VOS filesystem too
+                if isinstance(self.current_folder.files, dict):
+                    self.current_folder.files[filename] = virtual_file
+
+            # Open the file inside the editor
+            editor.open_virtual_file(virtual_file)
+
+            # Position the window
             editor.transform.position.x = 200
             editor.transform.position.y = 100
+
             editor.is_active = True
             editor.minimized = False
             editor.closed = False
-            
-            # Use the window_manager from explorer
-            if hasattr(self, 'window_manager') and self.window_manager:
+
+            # Add editor to WindowManager
+            if hasattr(self, "window_manager") and self.window_manager:
                 self.window_manager.add_window(editor)
-                print(f"[VOS] Editor added to WindowManager")
+                print("[VOS] Editor added to WindowManager")
             else:
-                print(f"[VOS] No WindowManager - trying fallback")
-                # Try to add to window manager via the main window
-                try:
-                    # Search for window manager in the app
-                    import sys
-                    for obj in sys.modules.values():
-                        if hasattr(obj, 'window_manager'):
-                            wm = getattr(obj, 'window_manager')
-                            if wm and hasattr(wm, 'add_window'):
-                                wm.add_window(editor)
-                                print(f"[VOS] Editor added via module")
-                                break
-                    else:
-                        editor.show()
-                except:
-                    editor.show()
-            
+                print("[VOS] No WindowManager available")
+
             print(f"[VOS] Opened editor for: {filename}")
             return True
-            
+
         except ImportError as e:
             print(f"[VOS] Text editor not found: {e}")
-            self.create_simple_editor(filename, content)
             return False
+
         except Exception as e:
             print(f"[VOS] Failed to open editor: {e}")
             import traceback
@@ -260,3 +277,38 @@ class ExplorerOperations:
         print(content)
         print("="*50)
         print("(Simple editor - open in GUI next time)")
+
+    def test_create_file(self):
+        print("\n========== VOS FILE TEST ==========")
+
+        print("Current folder:", getattr(self.current_folder, "name", None))
+
+        result = self.create_new_file("test_operations.txt")
+
+        print("Create result:", result)
+
+        if self.current_folder and hasattr(self.current_folder, "files"):
+            print("Files in current folder:")
+            print(self.current_folder.files)
+
+        print("===================================\n")
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

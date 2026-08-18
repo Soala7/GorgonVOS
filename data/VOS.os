@@ -13,18 +13,32 @@
                         "Documents": {
                             "name": "Documents",
                             "files": {
-                                "readme.txt": "Welcome to VOS!",
-                                "notes.txt": "Explorer test",
-                                "todo.txt": "Finish Explorer"
+                                "Hello_Renamed.txt": {
+                                    "name": "Hello_Renamed.txt",
+                                    "content": "HELLO WORLD"
+                                }
                             },
-                            "folders": {}
+                            "folders": {
+                                "Projects": {
+                                    "name": "Projects",
+                                    "files": {},
+                                    "folders": {}
+                                },
+                                "PersistentFolder": {
+                                    "name": "PersistentFolder",
+                                    "files": {},
+                                    "folders": {}
+                                },
+                                "RenamedFolder": {
+                                    "name": "RenamedFolder",
+                                    "files": {},
+                                    "folders": {}
+                                }
+                            }
                         },
                         "Downloads": {
                             "name": "Downloads",
-                            "files": {
-                                "setup.exe": "",
-                                "setup.zip": ""
-                            },
+                            "files": {},
                             "folders": {}
                         },
                         "Pictures": {
@@ -34,9 +48,7 @@
                         },
                         "Videos": {
                             "name": "Videos",
-                            "files": {
-                                "demo.mp4": ""
-                            },
+                            "files": {},
                             "folders": {}
                         },
                         "Music": {
