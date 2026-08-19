@@ -121,7 +121,7 @@ The virtual desktop provides the main environment from which VOS applications ca
 
 ---
 
-##VOS Launcher
+## VOS Launcher
 
 <p align="center"> <img src="assets/screenshot/launcher.png" width="850" alt="VOS Launcher"> </p>
 
