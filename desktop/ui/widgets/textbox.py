@@ -9,7 +9,6 @@ from __future__ import annotations
 from desktop.ui.core.event import KeyPressEvent
 from desktop.ui.widgets.widget import Widget
 
-
 class TextBox(Widget):
     """
     Simple text input widget.

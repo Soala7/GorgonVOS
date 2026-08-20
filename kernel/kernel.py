@@ -13,20 +13,16 @@ class Kernel:
         self.event_bus = EventBus()
         self.resources = ResourceManager()
 
-
     def boot(self):
         logger = Logger("Kernel")
 
-        # Register core services first
         self.service_manager.register("logger", logger)
         self.service_manager.register("event_bus", self.event_bus)
 
         logger.info("Boot sequence starting...")
 
-        # Register subsystems (event-aware)
         self._register_core_services()
 
-        # Setup event listeners
         self._setup_event_system()
 
         logger.info("Kernel boot complete.")
@@ -36,7 +32,6 @@ class Kernel:
         sm = self.service_manager
         logger = sm.get("logger")
 
-
         filesystem = FileSystem(
             self.event_bus
         )
@@ -45,29 +40,24 @@ class Kernel:
             self.event_bus
         )
 
-
         sm.register(
             "filesystem",
             filesystem
         )
-
 
         sm.register(
             "process",
             process_manager
         )
 
-
         vos_api.register_filesystem(
             filesystem
         )
-
 
         sm.register(
             "vos_api",
             vos_api
         )
-
 
         logger.info(
             "Core services registered."
@@ -76,7 +66,6 @@ class Kernel:
         shutdown_manager = ShutdownManager(
             sm
         )
-
 
         sm.register(
             "shutdown",

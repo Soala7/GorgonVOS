@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from desktop.shell.shell import Shell
 
-
 class DesktopScene:
     """
     Main desktop scene.
@@ -18,10 +17,6 @@ class DesktopScene:
 
         self.shell = Shell()
 
-    # --------------------------------------------------
-    # Update
-    # --------------------------------------------------
-
     def update(
         self,
         dt: float,
@@ -29,20 +24,12 @@ class DesktopScene:
 
         self.shell.update(dt)
 
-    # --------------------------------------------------
-    # Draw
-    # --------------------------------------------------
-
     def draw(
         self,
         renderer,
     ) -> None:
 
         self.shell.draw(renderer)
-
-    # --------------------------------------------------
-    # Events
-    # --------------------------------------------------
 
     def handle_event(
         self,

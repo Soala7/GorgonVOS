@@ -1,13 +1,10 @@
 from desktop.shell.shell import Shell
 
-
 class DummyRenderer:
     pass
 
-
 class DummyEvent:
     handled = False
-
 
 def main():
 
@@ -26,7 +23,6 @@ def main():
     shell.handle_event(DummyEvent())
 
     print("Shell tests passed.")
-
 
 if __name__ == "__main__":
     main()

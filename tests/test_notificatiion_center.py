@@ -1,7 +1,6 @@
 from desktop.shell.notification_center import NotificationCenter
 from desktop.ui.widgets.label import Label
 
-
 def main():
 
     center = NotificationCenter()
@@ -27,7 +26,6 @@ def main():
     assert len(center.children) == 0
 
     print("NotificationCenter tests passed.")
-
 
 if __name__ == "__main__":
     main()

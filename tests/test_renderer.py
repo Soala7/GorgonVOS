@@ -1,6 +1,5 @@
 from desktop.renderer.renderer import Renderer
 
-
 class DummyRenderer(Renderer):
 
     def begin_frame(self):
@@ -45,7 +44,6 @@ class DummyRenderer(Renderer):
     ):
         pass
 
-
 def main():
 
     renderer = DummyRenderer()
@@ -55,7 +53,6 @@ def main():
     renderer.end_frame()
 
     print("Renderer tests passed.")
-
 
 if __name__ == "__main__":
     main()

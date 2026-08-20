@@ -17,6 +17,5 @@ def test_kernel():
 
     print("✓ Kernel test passed")
 
-
 if __name__ == "__main__":
     test_kernel()

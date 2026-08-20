@@ -1,8 +1,7 @@
-# editor_layout.py
+
 from __future__ import annotations
 import pygame
 from typing import List, Dict, Tuple, Any
-
 
 class EditorLayout:
     """Handles text wrapping geometry, viewport calculations, and cursor coordinates."""
@@ -95,7 +94,3 @@ class EditorLayout:
             elif dist > min_dist:
                 break
         return best_col
-
-      
-
-       

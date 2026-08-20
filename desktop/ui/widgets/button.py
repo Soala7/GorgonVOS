@@ -9,7 +9,6 @@ from __future__ import annotations
 from desktop.ui.widgets.label import Label
 from desktop.ui.core.event import MousePressEvent, MouseReleaseEvent
 
-
 class Button(Label):
     """
     Basic clickable button.

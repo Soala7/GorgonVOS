@@ -1,10 +1,12 @@
-# editor_window.py
+
 
 from __future__ import annotations
 
 import pygame
 
+from desktop.ui.core.event import KeyPressEvent
 from desktop.ui.window.window import Window
+from resources.cursor_manager import cursor_manager
 from desktop.assests.icon_manager import IconManager
 from bridge.vos_api import vos_api
 
@@ -16,7 +18,6 @@ from .editor_menu import EditorMenu
 from .editor_search import EditorSearch
 from .editor_toolbar import EditorToolbar
 from .editor_tabs import EditorTabManager
-
 
 class SaveAsDialog:
     """Modal dialog for choosing a target directory and file name."""
@@ -78,7 +79,6 @@ class SaveAsDialog:
             if callable(unicode_char):
                 unicode_char = unicode_char()
 
-            # Confirm
             if key in (
                 pygame.K_RETURN,
                 pygame.K_KP_ENTER,
@@ -99,17 +99,14 @@ class SaveAsDialog:
 
                 return True
 
-            # Cancel
             elif key in (pygame.K_ESCAPE, 27):
                 self.is_active = False
                 return True
 
-            # Backspace
             elif key in (pygame.K_BACKSPACE, 8):
                 self.filename = self.filename[:-1]
                 return True
 
-            # Character input
             else:
                 if unicode_char and str(unicode_char).isprintable():
                     self.filename += str(unicode_char)
@@ -226,7 +223,6 @@ class SaveAsDialog:
             (dialog_rect.x + 15, dialog_rect.y + 115),
         )
 
-
 class EditorWindow(Window):
     """Main modularized Text Editor window coordinating core subsystems."""
 
@@ -249,7 +245,6 @@ class EditorWindow(Window):
 
         self._init_filesystem()
 
-        # Window state
         self.minimized: bool = False
         self.closed: bool = False
         self.is_active: bool = True
@@ -257,7 +252,6 @@ class EditorWindow(Window):
         self.transform.position.x = 200
         self.transform.position.y = 100
 
-        # Fonts
         self.font = pygame.font.SysFont(
             "Calibri",
             19,
@@ -269,7 +263,6 @@ class EditorWindow(Window):
             14,
         )
 
-        # Core subsystems
         self.tabs = EditorTabManager(height=28)
         self.layout = EditorLayout(self.font)
         self.render = EditorRender(
@@ -287,23 +280,18 @@ class EditorWindow(Window):
 
         self.dialog: SaveAsDialog | None = None
 
-        # Viewport
         self.page_padding_x = 20
         self.page_padding_y = 15
         self.line_height = 26
         self.status_bar_height = 24
 
-        # Cursor
         self.cursor_visible = True
         self.cursor_timer = 0.0
 
         pygame.key.set_repeat(300, 35)
 
         self._load_icons()
-
-    # --------------------------------------------------
-    # ACTIVE BUFFER
-    # --------------------------------------------------
+        self.content_cursor = cursor_manager.TEXT
 
     @property
     def buffer(self) -> EditorBuffer:
@@ -324,10 +312,6 @@ class EditorWindow(Window):
     @target_cursor_x.setter
     def target_cursor_x(self, val: float) -> None:
         self.tabs.active_tab.target_cursor_x = val
-
-    # --------------------------------------------------
-    # FILESYSTEM
-    # --------------------------------------------------
 
     def _init_filesystem(self) -> None:
         self.filesystem = None
@@ -371,10 +355,6 @@ class EditorWindow(Window):
             ),
         }
 
-    # --------------------------------------------------
-    # OPEN FILE
-    # --------------------------------------------------
-
     def open_virtual_file(self, virtual_file) -> None:
         file_name = getattr(
             virtual_file,
@@ -413,10 +393,6 @@ class EditorWindow(Window):
 
         print("[EDITOR][OPEN] File loaded into buffer.\n")
 
-    # --------------------------------------------------
-    # DOCUMENT COMMANDS
-    # --------------------------------------------------
-
     def new_document(self) -> None:
         self.new_file()
 
@@ -425,10 +401,6 @@ class EditorWindow(Window):
 
     def save_as_document(self) -> None:
         self.open_save_dialog()
-
-    # --------------------------------------------------
-    # SAVE
-    # --------------------------------------------------
 
     def save_file(self) -> bool:
         active = self.tabs.active_tab
@@ -479,8 +451,6 @@ class EditorWindow(Window):
             self.open_save_dialog()
             return True
 
-        # IMPORTANT:
-        # The text belongs to EditorBuffer.
         content = self.buffer.get_text()
 
         print(
@@ -527,10 +497,6 @@ class EditorWindow(Window):
         print("==================================\n")
 
         return result
-
-    # --------------------------------------------------
-    # SAVE AS
-    # --------------------------------------------------
 
     def save_to_directory(
         self,
@@ -585,10 +551,6 @@ class EditorWindow(Window):
             content,
         )
 
-    # --------------------------------------------------
-    # ACTUAL FILESYSTEM WRITE
-    # --------------------------------------------------
-
     def _write_to_filesystem(
         self,
         target_path: str,
@@ -624,10 +586,6 @@ class EditorWindow(Window):
             f"[EDITOR][WRITE] existing type: "
             f"{type(existing_file)}"
         )
-
-        # --------------------------------------------------
-        # EXISTING VIRTUAL FILE
-        # --------------------------------------------------
 
         if existing_file is not None:
 
@@ -665,7 +623,6 @@ class EditorWindow(Window):
 
                 return False
 
-            # Persist filesystem.
             if hasattr(self.filesystem, "save"):
 
                 print(
@@ -691,10 +648,6 @@ class EditorWindow(Window):
             print("----------------------------------------\n")
 
             return True
-
-        # --------------------------------------------------
-        # SAVE AS / NEW FILE
-        # --------------------------------------------------
 
         print(
             "[EDITOR][WRITE] "
@@ -766,16 +719,10 @@ class EditorWindow(Window):
 
             return False
 
-        # --------------------------------------------------
-        # IMPORTANT:
-        # Do NOT replace virtual_file with a string.
-        # --------------------------------------------------
-
         active = self.tabs.active_tab
 
         active.file_name = target_path.split("/")[-1]
 
-        # Try to recover the actual VirtualFile object.
         new_virtual_file = None
 
         if hasattr(
@@ -835,25 +782,13 @@ class EditorWindow(Window):
 
         return True
 
-    # --------------------------------------------------
-    # NEW FILE
-    # --------------------------------------------------
-
     def new_file(self) -> None:
         self.tabs.new_tab()
         self.title = "Untitled.txt - Text Editor"
 
-    # --------------------------------------------------
-    # SEARCH
-    # --------------------------------------------------
-
     def toggle_search(self) -> None:
         if hasattr(self.search, "visible"):
             self.search.visible = not self.search.visible
-
-    # --------------------------------------------------
-    # DIRTY STATE
-    # --------------------------------------------------
 
     def mark_dirty(self) -> None:
         self.tabs.active_tab.buffer.is_dirty = True
@@ -864,10 +799,6 @@ class EditorWindow(Window):
         )
 
         self.reset_cursor_blink()
-
-    # --------------------------------------------------
-    # GEOMETRY
-    # --------------------------------------------------
 
     def reset_cursor_blink(self) -> None:
         self.cursor_visible = True
@@ -977,13 +908,12 @@ class EditorWindow(Window):
             page_h,
         )
 
-    # --------------------------------------------------
-    # EVENTS
-    # --------------------------------------------------
-
     def handle_event(self, event) -> None:
 
         super().handle_event(event)
+
+        if getattr(event, "handled", False):
+            return
 
         evt_type = getattr(
             event,
@@ -1014,14 +944,26 @@ class EditorWindow(Window):
         if not self.is_active or self.minimized:
             return
 
-        # Save As modal has highest priority
+        if isinstance(event, KeyPressEvent) and getattr(self.search, "visible", False):
+            if event.key == pygame.K_ESCAPE:
+                self.search.visible = False
+            elif event.key in (pygame.K_RETURN, pygame.K_KP_ENTER):
+                match = self.search.next_match()
+                if match:
+                    self.buffer.cursor_row, self.buffer.cursor_col = match
+                    self.ensure_cursor_visible()
+            elif event.key == pygame.K_BACKSPACE:
+                self.search.query = self.search.query[:-1]
+                self.search.find_in_buffer(self.buffer.lines, self.search.query)
+            elif event.unicode and event.unicode.isprintable():
+                self.search.query += event.unicode
+                self.search.find_in_buffer(self.buffer.lines, self.search.query)
+            event.handled = True
+            return
+
         if self.dialog and getattr(self.dialog, "is_active", False):
             if self.dialog.handle_event(event):
                 return
-
-        # TEMPORARY:
-        # Skip menu and toolbar to test whether they are
-        # interfering with keyboard input.
 
         print(
             "[EDITOR EVENT]",
@@ -1031,10 +973,6 @@ class EditorWindow(Window):
         )
 
         self.input_handler.handle_event(event)
-
-    # --------------------------------------------------
-    # UPDATE
-    # --------------------------------------------------
 
     def update(self, dt: float) -> None:
 
@@ -1056,10 +994,6 @@ class EditorWindow(Window):
                 )
 
             self.update_layout()
-
-    # --------------------------------------------------
-    # DRAW
-    # --------------------------------------------------
 
     def draw(self, renderer) -> None:
 
@@ -1093,7 +1027,6 @@ class EditorWindow(Window):
 
         surface.set_clip(client)
 
-        # Workspace
         page_rect = self.get_page_rect()
 
         self.render.draw_workspace(
@@ -1102,7 +1035,6 @@ class EditorWindow(Window):
             page_rect,
         )
 
-        # Toolbar
         if hasattr(self.toolbar, "rect"):
 
             self.toolbar.rect.x = client.x
@@ -1121,7 +1053,6 @@ class EditorWindow(Window):
                     client.y + 32,
                 )
 
-        # Document
         v_idx, x_off = (
             self.layout.get_cursor_visual_info(
                 self.buffer.cursor_row,
@@ -1143,7 +1074,6 @@ class EditorWindow(Window):
             self.page_padding_y,
         )
 
-        # Status bar
         word_count = sum(
             len(line.split())
             for line in self.buffer.lines
@@ -1160,10 +1090,19 @@ class EditorWindow(Window):
             self.status_bar_height,
         )
 
-        # File menu
+        if getattr(self.search, "visible", False):
+            search_rect = pygame.Rect(client.right - 320, client.y + 8, 300, 30)
+            pygame.draw.rect(surface, (255, 255, 255), search_rect, border_radius=6)
+            pygame.draw.rect(surface, (70, 120, 220), search_rect, 1, border_radius=6)
+            query = self.search.query or "Find..."
+            color = (35, 40, 50) if self.search.query else (135, 140, 150)
+            surface.blit(self.status_font.render(query, True, color), (search_rect.x + 8, search_rect.y + 7))
+            if self.search.matches:
+                count = f"{self.search.current_match_idx + 1}/{len(self.search.matches)}"
+                surface.blit(self.status_font.render(count, True, (80, 90, 110)), (search_rect.right - 45, search_rect.y + 7))
+
         self.file_menu.draw(surface)
 
-        # Save dialog
         if (
             self.dialog
             and getattr(
@@ -1178,21 +1117,3 @@ class EditorWindow(Window):
             )
 
         surface.set_clip(old_clip)
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-
-

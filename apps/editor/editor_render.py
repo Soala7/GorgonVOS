@@ -1,8 +1,7 @@
-# editor_render.py
+
 from __future__ import annotations
 import pygame
 from typing import List, Dict, Any
-
 
 class EditorRender:
     """Manages workspace, paper background, text surface, and status bar rendering."""
@@ -47,7 +46,6 @@ class EditorRender:
             vline = visual_lines[idx]
             render_y = base_y + (idx - scroll_y) * line_height
 
-            # Line guide rule
             guide_y = render_y + line_height - 2
             pygame.draw.line(
                 surface,
@@ -57,7 +55,6 @@ class EditorRender:
                 1,
             )
 
-            # Active line highlight
             if idx == cursor_v_idx and is_active:
                 h_rect = pygame.Rect(
                     base_x - 5,
@@ -67,12 +64,10 @@ class EditorRender:
                 )
                 pygame.draw.rect(surface, (235, 243, 250), h_rect)
 
-            # Text
             if vline["text"]:
                 img = self.font.render(vline["text"], True, (0, 0, 0))
                 surface.blit(img, (base_x, render_y))
 
-        # Active cursor line bar
         if cursor_visible and is_active and (start_index <= cursor_v_idx < end_index):
             cursor_y = base_y + (cursor_v_idx - scroll_y) * line_height
             pygame.draw.rect(

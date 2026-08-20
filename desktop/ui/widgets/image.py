@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from desktop.ui.widgets.widget import Widget
 
-
 class Image(Widget):
     """
     Displays an image.

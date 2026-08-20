@@ -1,6 +1,5 @@
 from boot.login_screen import LoginScreen
 
-
 def main():
 
     login = LoginScreen()
@@ -20,7 +19,6 @@ def main():
     assert not login.logged_in
 
     print("LoginScreen tests passed.")
-
 
 if __name__ == "__main__":
     main()

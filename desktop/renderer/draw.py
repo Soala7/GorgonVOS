@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import pygame
 
-
 def rounded_rect(
     surface: pygame.Surface,
     color,
@@ -30,7 +29,6 @@ def rounded_rect(
         ),
         border_radius=radius,
     )
-
 
 def outline(
     surface: pygame.Surface,
@@ -56,7 +54,6 @@ def outline(
         border_radius=radius,
     )
 
-
 def circle(
     surface: pygame.Surface,
     color,
@@ -71,7 +68,6 @@ def circle(
         (x, y),
         radius,
     )
-
 
 def line(
     surface: pygame.Surface,
@@ -88,7 +84,6 @@ def line(
         end,
         width,
     )
-
 
 def image(
     surface: pygame.Surface,

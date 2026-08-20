@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import pygame
 
-
 class LoginScreen:
 
     def __init__(self) -> None:
@@ -21,17 +20,9 @@ class LoginScreen:
 
         self.selected_user = None
 
-    # --------------------------------------------------
-    # User
-    # --------------------------------------------------
-
     def select_user(self, username: str) -> None:
 
         self.selected_user = username
-
-    # --------------------------------------------------
-    # Login
-    # --------------------------------------------------
 
     def login(self) -> bool:
 
@@ -45,10 +36,6 @@ class LoginScreen:
     def logout(self) -> None:
 
         self.logged_in = False
-
-    # --------------------------------------------------
-    # Draw
-    # --------------------------------------------------
 
     def draw(self, renderer) -> None:
 
@@ -70,8 +57,6 @@ class LoginScreen:
             "DejaVu Sans Mono",
             24,
         )
-
-        # Avatar
 
         pygame.draw.circle(
             surface,

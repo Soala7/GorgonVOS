@@ -1,7 +1,6 @@
-import pygame 
+import pygame
 
 from desktop.renderer.pygame_renderer import PygameRenderer
-
 
 def main():
 
@@ -20,7 +19,6 @@ def main():
     pygame.quit()
 
     print("PygameRenderer tests passed.")
-
 
 if __name__ == "__main__":
     main()

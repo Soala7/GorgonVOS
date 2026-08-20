@@ -1,14 +1,11 @@
 from boot.desktop_scene import DesktopScene
 
-
 class DummyRenderer:
     pass
-
 
 class DummyEvent:
 
     handled = False
-
 
 def main():
 
@@ -21,7 +18,6 @@ def main():
     scene.handle_event(DummyEvent())
 
     print("DesktopScene tests passed.")
-
 
 if __name__ == "__main__":
     main()

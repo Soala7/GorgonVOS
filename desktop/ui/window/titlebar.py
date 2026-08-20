@@ -9,7 +9,6 @@ from __future__ import annotations
 from desktop.ui.widgets.panel import Panel
 from desktop.ui.widgets.label import Label
 
-
 class TitleBar(Panel):
     """
     Displays the window title.

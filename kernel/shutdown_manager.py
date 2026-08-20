@@ -8,18 +8,15 @@ class ShutdownManager:
 
         self.service_manager = service_manager
 
-
     def shutdown(self):
 
         print("[SYSTEM] Shutdown requested")
-
 
         filesystem = (
             self.service_manager.get(
                 "filesystem"
             )
         )
-
 
         if filesystem:
 
@@ -28,7 +25,6 @@ class ShutdownManager:
             print(
                 "[SYSTEM] Filesystem saved"
             )
-
 
         print(
             "[SYSTEM] Shutdown complete"

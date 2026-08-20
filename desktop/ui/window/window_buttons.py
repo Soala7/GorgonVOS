@@ -10,7 +10,6 @@ from desktop.ui.widgets.button import Button
 from desktop.ui.widgets.panel import Panel
 from desktop.ui.window.window import Window
 
-
 class WindowButtons(Panel):
     """
     Minimize, Maximize and Close buttons.

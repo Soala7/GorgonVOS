@@ -35,17 +35,3 @@ class Folder:
         contents.extend(self.folders.keys())
         contents.extend(self.files.keys())
         return contents
-
-
-
-
-
-
-
-
-
-
-
-
-
-        

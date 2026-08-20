@@ -1,9 +1,7 @@
 from desktop.ui.widgets.spacer import Spacer
 
-
 class DummyRenderer:
     pass
-
 
 def main():
 
@@ -15,7 +13,6 @@ def main():
     spacer.on_draw(DummyRenderer())
 
     print("Spacer tests passed.")
-
 
 if __name__ == "__main__":
     main()

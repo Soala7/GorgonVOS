@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from desktop.ui.core.container import Container
 
-
 class Panel(Container):
     def __init__(self, name: str = "Panel") -> None:
         super().__init__(name)

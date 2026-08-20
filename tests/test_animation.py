@@ -1,6 +1,5 @@
 from desktop.ui.core.animation import Animation
 
-
 def main():
 
     animation = Animation(2.0)
@@ -25,7 +24,6 @@ def main():
     assert not animation.playing
 
     print("Animation tests passed.")
-
 
 if __name__ == "__main__":
     main()

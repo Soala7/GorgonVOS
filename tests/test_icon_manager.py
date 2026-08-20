@@ -8,7 +8,6 @@ import pygame
 
 from desktop.assests.icon_manager import IconManager
 
-
 class IconManagerTests(unittest.TestCase):
     def test_get_returns_none_for_invalid_svg(self):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -35,7 +34,6 @@ class IconManagerTests(unittest.TestCase):
                 surface = IconManager.get("launcher/snake", 32)
 
             self.assertIsNotNone(surface)
-
 
 if __name__ == "__main__":
     unittest.main()

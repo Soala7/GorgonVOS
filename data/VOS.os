@@ -32,7 +32,7 @@
                             "files": {
                                 "document.txt": {
                                     "name": "document.txt",
-                                    "content": "Bro"
+                                    "content": "Hello world to my last desing in the VOS simulator. \nThank you for downloading and exploring.\n    By S7A"
                                 }
                             },
                             "folders": {

@@ -1,6 +1,5 @@
 from desktop.ui.widgets.image import Image
 
-
 class DummyRenderer:
 
     def draw_image(
@@ -10,7 +9,6 @@ class DummyRenderer:
         keep_aspect,
     ):
         pass
-
 
 def main():
 
@@ -29,7 +27,6 @@ def main():
     assert image.image is None
 
     print("Image tests passed.")
-
 
 if __name__ == "__main__":
     main()

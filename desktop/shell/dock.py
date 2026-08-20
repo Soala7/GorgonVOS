@@ -19,7 +19,6 @@ from desktop.ui.widgets.widget import Widget
 from desktop.ui.core.event import MouseButton, MousePressEvent, MouseReleaseEvent
 from desktop.assests.icon_manager import IconManager
 
-
 class Dock(Widget):
 
     ICON_SIZE = 45
@@ -35,6 +34,8 @@ class Dock(Widget):
         self.explorer = None
         self.terminal = None
         self.text_editor = None
+        self.music = None
+        self.settings = None
         self.visible = False
         self.animating = False
 
@@ -60,11 +61,7 @@ class Dock(Widget):
             IconManager.get("launcher/terminal", self.ICON_SIZE),
             IconManager.get("launcher/settings", self.ICON_SIZE),
 
-
         ]
-        
-
-    # --------------------------------------------------
 
     def update(self, dt):
 
@@ -74,19 +71,11 @@ class Dock(Widget):
 
         activation_zone = screen_height - 120
 
-        # ----------------------------
-        # Mouse entered activation zone
-        # ----------------------------
-
         if self.mouse_pos[1] >= activation_zone:
 
             self.visible = True
             self.animating = True
             self.hide_timer = self.hide_delay
-
-        # ----------------------------
-        # Mouse left
-        # ----------------------------
 
         elif self.visible:
 
@@ -96,10 +85,6 @@ class Dock(Widget):
 
                 self.visible = False
                 self.animating = True
-
-        # ----------------------------
-        # Animate
-        # ----------------------------
 
         target = 0 if self.visible else self.hidden_offset
 
@@ -121,7 +106,23 @@ class Dock(Widget):
 
             self.animating = False
 
-    # --------------------------------------------------
+    def _toggle_app_window(self, app) -> None:
+        window = getattr(app, "window", None)
+        window_manager = getattr(app, "window_manager", None)
+
+        if window is None or window_manager is None:
+            return
+
+        if window in window_manager.windows and not window.closed and not window.minimized:
+            window.minimize()
+            if window_manager.active_window is window:
+                window_manager.active_window = None
+            return
+
+        if window in window_manager.windows and window.minimized:
+            window.restore()
+        app.open()
+
     def handle_event(self, event):
 
         if not self.visible:
@@ -162,44 +163,41 @@ class Dock(Widget):
                 y <= event.y <= y + self.SLOT_SIZE
             ):
 
-                # Launcher
                 if i == 0:
                     if self.launcher:
                         self.launcher.toggle()
                         print("[Dock] Launcher")
 
-                # Browser
                 elif i == 1:
                     if self.browser:
-                        self.browser.open()
+                        self._toggle_app_window(self.browser)
                         print("[Dock] Browser")
 
-                # Explorer
                 elif i == 2:
                     if self.explorer:
-
-                        self.explorer.open()
-                        
+                        self._toggle_app_window(self.explorer)
                         print("[Dock] Explorer")
 
-                # Music
                 elif i == 3:
+                    if self.music:
+                        self._toggle_app_window(self.music)
                     print("[Dock] Music")
 
-                # Notes
                 elif i == 4:
                     if self.text_editor:
-                        self.text_editor.open()
-                    
+                        self._toggle_app_window(self.text_editor)
+
                     print("[Dock] Notes")
 
-                # Terminal
                 elif i == 5:
                     if self.terminal:
-
-                        self.terminal.open()
-
+                        self._toggle_app_window(self.terminal)
                         print("[Dock] Terminal")
+
+                elif i == 6:
+                    if self.settings:
+                        self._toggle_app_window(self.settings)
+                    print("[Dock] Settings")
 
                 break
     def draw(self, renderer) -> None:
@@ -231,8 +229,6 @@ class Dock(Widget):
                 self.SLOT_SIZE + self.SPACING
             )
 
-            # Shadow
-
             shadow = pygame.Surface(
                 (self.SLOT_SIZE, self.SLOT_SIZE),
                 pygame.SRCALPHA,
@@ -250,7 +246,6 @@ class Dock(Widget):
 
             surface.blit(shadow, (x, y))
 
-            # Background
             mouse_x, mouse_y = self.mouse_pos
 
             hovered = (
@@ -267,7 +262,6 @@ class Dock(Widget):
                 (52, 52, 58)
             )
 
-
             pygame.draw.circle(
                 surface,
                 (95, 95, 105),
@@ -278,8 +272,6 @@ class Dock(Widget):
                 self.SLOT_SIZE // 2,
                 1,
             )
-
-            # Icon
 
             icon = self.icons[i]
 
@@ -304,4 +296,3 @@ class Dock(Widget):
                         y + (self.SLOT_SIZE - draw_icon.get_height()) // 2,
                     ),
                 )
-        

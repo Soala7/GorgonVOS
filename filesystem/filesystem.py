@@ -14,7 +14,7 @@ class FileSystem:
         self.event_bus = event_bus
         self.disk = VirtualDisk()
         self.storage = FileSystemStorage(self.disk)
-        #save paths to VOS.os
+
         base_path = os.path.dirname(
             os.path.dirname(
                     os.path.abspath(__file__)
@@ -40,13 +40,11 @@ class FileSystem:
         for users in user_directory:
             user_dirs = "/users/guest/" + users
             self.create_folder(user_dirs)
-                     
 
     def _create_default_structure(self):
         self._default_user_directories()
         self._default_directories()
-        #Creates the default VOS directory structure
-        
+
     def get_current_path(self):
         path = []
         current = self.current_directory
@@ -54,9 +52,9 @@ class FileSystem:
             path.append(current.name)
             current = current.parent
         return "/" + "/".join(reversed(path))
-    
+
     def create_folder(self, path):
-        #Creates a folder at the given path.
+
         if path.startswith("/"):
             current = self.root
         else:
@@ -76,7 +74,7 @@ class FileSystem:
         return True
 
     def create_file(self, path, content=""):
-        # Creates a file in the current directory or specified path.
+
         print(f"[FILESYSTEM] create file request: {path}")
         parts = self._split_path(path)
         filename = parts.pop()
@@ -86,14 +84,13 @@ class FileSystem:
         else:
             current = self.current_directory
 
-        # Move into target folder if needed
         for part in parts:
             if part not in current.folders:
                 print("[FILESYSTEM] folder not found:",part)
                 return False
 
             current = current.folders[part]
-        # Check existing file
+
         if filename in current.files:
             print("[FILESYSTEM] file already exists")
             return False
@@ -103,17 +100,15 @@ class FileSystem:
         return True
 
     def change_directory(self, path):
-        #Changes the current working directory.
+
         print("[FILESYSTEM] cd request:", path)
 
-        # Parent directory
         if path == "..":
             if self.current_directory.parent is not None:
                 self.current_directory = self.current_directory.parent
 
             return True
 
-        # Root directory
         if path == "/":
             self.current_directory = self.root
             return True
@@ -158,7 +153,7 @@ class FileSystem:
         if self.event_bus:
             self.event_bus.emit("file_deleted",{"path": path})
         return True
-    
+
     def delete_folder(self, path):
         print("[FILESYSTEM] delete folder request:",path)
         path = self._resolve_path(path)
@@ -169,7 +164,7 @@ class FileSystem:
         if folder_name not in parent_folder.folders:
             return False
         folder = parent_folder.folders[folder_name]
-        # Prevent deleting non-empty folders
+
         if folder.files or folder.folders:
             print("[FILESYSTEM] folder not empty")
             return False
@@ -179,8 +174,7 @@ class FileSystem:
         return True
 
     def list_directory(self, path=None):
-        #Lists contents of a directory.
-    
+
         if path is None or path == "":
             return self.current_directory.list_contents()
         folder = self._get_folder(path)
@@ -209,17 +203,17 @@ class FileSystem:
 
         if src_folder is None:
             return False
-        
+
         if filename not in src_folder.files:
             return False
-        
+
         content = self.disk.read_file(source)
         dst_folder_path, dst_filename = self._split_file_path(destination)
         dst_folder = self._get_folder(dst_folder_path)
 
         if dst_folder is None:
             return False
-        
+
         if dst_filename in dst_folder.files:
             return False
         self.disk.delete_file(source)
@@ -277,8 +271,6 @@ class FileSystem:
 
         print("[FILESYSTEM] renamed:", filename, "->", dst_filename)
         return True
-
-       
 
     def copy_file(self, source, destination):
         print("[FILESYSTEM] copy request:",source,"->",destination)
@@ -341,7 +333,7 @@ class FileSystem:
         return current
 
     def get_special_folder(self, key):
-        #Returns one of the predefined VOS folders.
+
         mapping = {
             "explorer/documents": "/users/guest/Documents",
             "explorer/downloads": "/users/guest/Downloads",
@@ -357,19 +349,3 @@ class FileSystem:
             return None
         return self._get_folder(path)
     def save(self):self.storage.save(self.root,self.save_path)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        

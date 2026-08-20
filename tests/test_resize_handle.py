@@ -1,6 +1,5 @@
 from desktop.ui.window.resize_handle import ResizeHandle
 
-
 def main():
 
     handle = ResizeHandle()
@@ -18,7 +17,6 @@ def main():
     assert not handle.dragging
 
     print("ResizeHandle tests passed.")
-
 
 if __name__ == "__main__":
     main()

@@ -9,7 +9,6 @@ from __future__ import annotations
 from desktop.ui.widgets.panel import Panel
 from desktop.ui.layout.vertical_layout import VerticalLayout
 
-
 class NotificationCenter(Panel):
     """
     Displays desktop notifications.

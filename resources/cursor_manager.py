@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import pygame
 
-
 class CursorManager:
 
     DEFAULT = "default"
@@ -33,8 +32,6 @@ class CursorManager:
 
         self.current = self.DEFAULT
 
-    # --------------------------------------------------
-
     def _load(self, path):
 
         image = pygame.image.load(path)
@@ -49,16 +46,12 @@ class CursorManager:
 
         return image
 
-    # --------------------------------------------------
-
     def set(self, cursor):
 
         if cursor in self.cursors:
             self.current = cursor
         else:
             self.current = self.DEFAULT
-
-    # --------------------------------------------------
 
     def draw(self, renderer):
 
@@ -73,6 +66,5 @@ class CursorManager:
                 my - 2,
             ),
         )
-
 
 cursor_manager = CursorManager()

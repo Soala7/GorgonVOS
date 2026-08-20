@@ -10,7 +10,6 @@ import pygame
 
 from desktop.ui.widgets.widget import Widget
 
-
 class IconButton(Widget):
 
     def __init__(
@@ -37,8 +36,6 @@ class IconButton(Widget):
 
         self.tooltip = name
 
-    # --------------------------------------------------
-
     def contains(self, mouse_pos):
 
         mx, my = mouse_pos
@@ -49,15 +46,11 @@ class IconButton(Widget):
             self.y <= my <= self.y + self.size
         )
 
-    # --------------------------------------------------
-
     def update(self, dt):
 
         self.hovered = self.contains(
             pygame.mouse.get_pos()
         )
-
-    # --------------------------------------------------
 
     def draw(self, renderer):
 

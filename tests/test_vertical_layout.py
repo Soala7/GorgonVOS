@@ -2,7 +2,6 @@ from desktop.ui.layout.vertical_layout import VerticalLayout
 from desktop.ui.core.container import Container
 from desktop.ui.core.component import Component
 
-
 def main():
 
     container = Container()
@@ -31,7 +30,6 @@ def main():
     assert c.transform.position.y == 75
 
     print("Vertical layout tests passed.")
-
 
 if __name__ == "__main__":
     main()

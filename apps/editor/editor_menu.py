@@ -9,7 +9,6 @@ import pygame
 
 from desktop.ui.core.event import MousePressEvent
 
-
 class EditorMenu:
     def __init__(self, editor) -> None:
         self.editor = editor
@@ -154,25 +153,3 @@ class EditorMenu:
                 text,
                 (rect.x + 12, rect.y + 7)
             )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        

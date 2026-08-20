@@ -1,4 +1,4 @@
-# apps/explorer/explorer_operations.py
+
 """File operations for Explorer - Create, Delete, Rename, Open"""
 from filesystem.virtual_file import VirtualFile
 class ExplorerOperations:
@@ -77,14 +77,14 @@ class ExplorerOperations:
         if self.current_folder is None:
             print("[VOS] Cannot delete: No folder selected")
             return False
-        
+
         item_name = getattr(item, 'name', None)
         if not item_name:
             print("[VOS] Cannot delete: Invalid item")
             return False
-        
+
         is_folder = self._is_item_folder(item)
-        
+
         if hasattr(self.current_folder, 'delete_item'):
             success = self.current_folder.delete_item(item_name)
             if success:
@@ -92,7 +92,7 @@ class ExplorerOperations:
                 if self.selected_item == item:
                     self.selected_item = None
                 return True
-        
+
         try:
             if is_folder:
                 if hasattr(self.current_folder, 'folders'):
@@ -110,7 +110,7 @@ class ExplorerOperations:
                     elif isinstance(self.current_folder.files, list):
                         if item_name in self.current_folder.files:
                             self.current_folder.files.remove(item_name)
-            
+
             if self.selected_item == item:
                 self.selected_item = None
             print(f"[VOS] Deleted: {item_name}")
@@ -123,16 +123,16 @@ class ExplorerOperations:
         """Rename a file or folder"""
         if self.current_folder is None:
             return False
-        
+
         old_name = getattr(item, 'name', None)
         if not old_name:
             return False
-        
+
         is_folder = self._is_item_folder(item)
-        
+
         if hasattr(self.current_folder, 'rename_item'):
             return self.current_folder.rename_item(old_name, new_name)
-        
+
         try:
             if is_folder:
                 if hasattr(self.current_folder, 'folders'):
@@ -147,7 +147,7 @@ class ExplorerOperations:
                         self.current_folder.files[new_name] = file_data
                         if hasattr(item, 'name'):
                             item.name = new_name
-            
+
             print(f"[VOS] Renamed: {old_name} -> {new_name}")
             return True
         except Exception as e:
@@ -158,7 +158,7 @@ class ExplorerOperations:
         """Open a file or folder"""
         item_name = getattr(item, 'name', 'Unknown')
         print(f"[VOS] open_item called for: '{item_name}'")
-        
+
         if self._is_item_folder(item):
             print(f"[VOS] Opening folder: '{item_name}'")
             self.navigate_to(item)
@@ -169,7 +169,7 @@ class ExplorerOperations:
     def open_file(self, filename, item=None):
         """Open a file with the appropriate application"""
         ext = filename.split('.')[-1] if '.' in filename else ''
-        
+
         content = ""
         if hasattr(self.current_folder, 'get_file_content'):
             content = self.current_folder.get_file_content(filename)
@@ -178,7 +178,7 @@ class ExplorerOperations:
         elif hasattr(self.current_folder, 'files'):
             if isinstance(self.current_folder.files, dict):
                 content = self.current_folder.files.get(filename, "")
-        
+
         if ext in ['txt', 'py', 'md', 'json', 'xml', 'css', 'js', 'html', 'htm']:
             self.open_in_editor(filename, content)
         elif ext in ['jpg', 'jpeg', 'png', 'gif', 'bmp']:
@@ -197,30 +197,22 @@ class ExplorerOperations:
 
             print(f"[VOS] Creating editor for: {filename}")
 
-            # Create the editor window
             editor = EditorWindow()
 
-            # Find the actual file object in the current folder
             virtual_file = None
 
             if hasattr(self.current_folder, "files"):
                 if isinstance(self.current_folder.files, dict):
                     virtual_file = self.current_folder.files.get(filename)
 
-            # The current filesystem stores file content as a string.
-            # EditorWindow expects a virtual file object, so for now
-            # attach the file information directly.
             if virtual_file is None or isinstance(virtual_file, str):
                 virtual_file = VirtualFile(filename, content)
 
-                # Make sure saving updates the VOS filesystem too
                 if isinstance(self.current_folder.files, dict):
                     self.current_folder.files[filename] = virtual_file
 
-            # Open the file inside the editor
             editor.open_virtual_file(virtual_file)
 
-            # Position the window
             editor.transform.position.x = 200
             editor.transform.position.y = 100
 
@@ -228,7 +220,6 @@ class ExplorerOperations:
             editor.minimized = False
             editor.closed = False
 
-            # Add editor to WindowManager
             if hasattr(self, "window_manager") and self.window_manager:
                 self.window_manager.add_window(editor)
                 print("[VOS] Editor added to WindowManager")
@@ -292,23 +283,3 @@ class ExplorerOperations:
             print(self.current_folder.files)
 
         print("===================================\n")
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

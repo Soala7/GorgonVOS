@@ -1,6 +1,5 @@
 from desktop.ui.window.window import Window
 
-
 def main():
 
     window = Window(
@@ -40,7 +39,6 @@ def main():
     assert window.destroyed
 
     print("Window tests passed.")
-
 
 if __name__ == "__main__":
     main()

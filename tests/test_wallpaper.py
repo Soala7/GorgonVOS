@@ -1,6 +1,5 @@
 from desktop.shell.wallpaper import Wallpaper
 
-
 def main():
 
     wallpaper = Wallpaper()
@@ -12,7 +11,6 @@ def main():
     assert wallpaper.image is not None
 
     print("Wallpaper tests passed.")
-
 
 if __name__ == "__main__":
     main()

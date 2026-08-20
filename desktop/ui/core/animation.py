@@ -6,7 +6,6 @@ Base animation class.
 
 from __future__ import annotations
 
-
 class Animation:
     """
     Base animation class.

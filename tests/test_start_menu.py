@@ -1,7 +1,6 @@
 from desktop.shell.start_menu import StartMenu
 from desktop.ui.widgets.button import Button
 
-
 def main():
 
     menu = StartMenu()
@@ -27,7 +26,6 @@ def main():
     assert len(menu.children) == 1
 
     print("StartMenu tests passed.")
-
 
 if __name__ == "__main__":
     main()

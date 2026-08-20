@@ -32,7 +32,7 @@ class Desktop(Panel):
         self.launcher = Launcher()
         self.notification_center = NotificationCenter()
         self.window_manager = WindowManager()
-        self.status_bar = StatusBar()    
+        self.status_bar = StatusBar()
 
         self.wallpaper = Wallpaper()
         wallpaper = pygame.image.load(
@@ -45,11 +45,13 @@ class Desktop(Panel):
 
         self.start_menu = StartMenu()
 
-        self.launcher = Launcher()
 
     def set_wallpaper(self, image) -> None:
 
         self.wallpaper.set_image(image)
+
+    def set_wallpaper_path(self, path: str) -> None:
+        self.wallpaper.load(path)
 
     def add_window(self, window) -> None:
 
@@ -72,42 +74,24 @@ class Desktop(Panel):
         self.window_manager.update(dt)
 
     def draw(self, renderer) -> None:
-        # Wallpaper
+
         self.wallpaper.draw(
             renderer,
             renderer.surface.get_width(),
             renderer.surface.get_height(),
         )
 
-        # --------------------------------------------------
-        # Desktop Icons
-        # --------------------------------------------------
         self.desktop_icons.draw(renderer)
 
-        # --------------------------------------------------
-        # Windows
-        # --------------------------------------------------
         self.window_manager.draw(renderer)
 
-        # --------------------------------------------------
-        # Dock
-        # --------------------------------------------------
         self.dock.draw(renderer)
 
-        # --------------------------------------------------
-        # Status Bar
-        # --------------------------------------------------
         self.status_bar.draw(renderer)
 
-        # --------------------------------------------------
-        # Launcher (Always above windows)
-        # --------------------------------------------------
         if self.launcher:
             self.launcher.draw(renderer)
 
-        # --------------------------------------------------
-        # Notification Center (Always on top)
-        # --------------------------------------------------
         self.notification_center.draw(renderer)
 
     def handle_event(self, event) -> None:

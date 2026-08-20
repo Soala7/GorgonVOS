@@ -2,14 +2,11 @@ import time
 
 from boot.boot_manager import BootManager
 
-
 class DummyRenderer:
     pass
 
-
 class DummyEvent:
     handled = False
-
 
 def main():
 
@@ -36,7 +33,6 @@ def main():
     manager.handle_event(DummyEvent())
 
     print("BootManager tests passed.")
-
 
 if __name__ == "__main__":
     main()

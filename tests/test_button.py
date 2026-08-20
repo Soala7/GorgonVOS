@@ -4,7 +4,6 @@ from desktop.ui.core.event import (
     MouseReleaseEvent,
 )
 
-
 def main():
 
     clicked = False
@@ -40,7 +39,6 @@ def main():
     assert clicked
 
     print("Button tests passed.")
-
 
 if __name__ == "__main__":
     main()

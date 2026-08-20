@@ -1,8 +1,7 @@
-# runtime/process_table.py
+
 
 import time
 from core.logger import Logger
-
 
 class Process:
     """
@@ -14,7 +13,7 @@ class Process:
         self.name = name
         self.owner = owner
         self.priority = priority
-        self.process_type = process_type  # app | service | system
+        self.process_type = process_type
         self.instance = instance
 
         self.state = "CREATED"
@@ -39,7 +38,6 @@ class Process:
         self.state = "TERMINATED"
         self.end_time = time.time()
 
-
 class ProcessTable:
     """
     Central registry of all running VOS processes.
@@ -52,9 +50,6 @@ class ProcessTable:
         self.processes = {}
         self.next_pid = 1
 
-    # ----------------------------
-    # PROCESS CREATION
-    # ----------------------------
     def create_process(self, name, owner="system", priority="normal", process_type="app", instance=None):
         pid = self.next_pid
         self.next_pid += 1
@@ -81,9 +76,6 @@ class ProcessTable:
 
         return process
 
-    # ----------------------------
-    # PROCESS CONTROL
-    # ----------------------------
     def terminate_process(self, pid):
         process = self.processes.get(pid)
 
@@ -121,9 +113,6 @@ class ProcessTable:
 
         return True
 
-    # ----------------------------
-    # QUERY METHODS
-    # ----------------------------
     def get_process(self, pid):
         return self.processes.get(pid)
 

@@ -2,7 +2,6 @@ from desktop.ui.layout.horizontal_layout import HorizontalLayout
 from desktop.ui.core.container import Container
 from desktop.ui.core.component import Component
 
-
 def main():
 
     container = Container()
@@ -31,7 +30,6 @@ def main():
     assert c.transform.position.x == 75
 
     print("Horizontal layout tests passed.")
-
 
 if __name__ == "__main__":
     main()

@@ -1,7 +1,6 @@
-# runtime/app_manager.py
+
 
 from core.logger import Logger
-
 
 class App:
     """
@@ -10,12 +9,11 @@ class App:
 
     def __init__(self, name, entry_point, app_type="native"):
         self.name = name
-        self.entry_point = entry_point  # function or class
+        self.entry_point = entry_point
         self.app_type = app_type
 
         self.is_running = False
         self.process = None
-
 
 class AppManager:
     """
@@ -30,12 +28,9 @@ class AppManager:
         self.process_table = process_table
         self.session_manager = session_manager
 
-        self.apps = {}           # name -> App
-        self.running_apps = {}   # pid -> App
+        self.apps = {}
+        self.running_apps = {}
 
-    # ----------------------------
-    # REGISTRATION
-    # ----------------------------
     def register_app(self, name, entry_point, app_type="native"):
         if name in self.apps:
             self.logger.warning(f"App already registered: {name}")
@@ -49,9 +44,6 @@ class AppManager:
         if self.event_bus:
             self.event_bus.emit("app:registered", {"name": name})
 
-    # ----------------------------
-    # LAUNCHING
-    # ----------------------------
     def launch_app(self, name, *args, **kwargs):
         app = self.apps.get(name)
 
@@ -61,7 +53,6 @@ class AppManager:
 
         self.logger.info(f"Launching app: {name}")
 
-        # Create process for the app
         process = self.process_table.create_process(
             name=name,
             process_type="app",
@@ -73,11 +64,9 @@ class AppManager:
 
         self.running_apps[process.pid] = app
 
-        # Attach to session if available
         if self.session_manager and self.session_manager.active_session:
             self.session_manager.active_session.add_process(process.pid)
 
-        # Run entry point (this will later connect to GUI)
         try:
             if callable(app.entry_point):
                 app.entry_point(*args, **kwargs)
@@ -93,9 +82,6 @@ class AppManager:
 
         return process
 
-    # ----------------------------
-    # STOPPING
-    # ----------------------------
     def close_app(self, pid):
         app = self.running_apps.get(pid)
 
@@ -122,9 +108,6 @@ class AppManager:
 
         return True
 
-    # ----------------------------
-    # QUERY
-    # ----------------------------
     def list_apps(self):
         return list(self.apps.keys())
 

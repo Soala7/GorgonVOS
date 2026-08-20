@@ -1,7 +1,6 @@
 from desktop.ui.window.window import Window
 from desktop.ui.window.window_buttons import WindowButtons
 
-
 def main():
 
     window = Window()
@@ -27,7 +26,6 @@ def main():
     assert window.closed
 
     print("WindowButtons tests passed.")
-
 
 if __name__ == "__main__":
     main()

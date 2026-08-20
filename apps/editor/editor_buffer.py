@@ -1,6 +1,5 @@
-# editor_buffer.py
-from __future__ import annotations
 
+from __future__ import annotations
 
 class EditorBuffer:
     """Manages raw text lines, cursor position, and mutation history."""

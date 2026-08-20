@@ -5,7 +5,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from core.event_bus import EventBus
 from filesystem.filesystem import FileSystem
 
-
 def test_filesystem():
     bus = EventBus()
     fs = FileSystem(bus)

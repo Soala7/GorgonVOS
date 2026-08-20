@@ -12,11 +12,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from math import hypot
 
-
-# ==========================================================
-# Point
-# ==========================================================
-
 @dataclass(slots=True)
 class Point:
     x: float = 0.0
@@ -35,11 +30,6 @@ class Point:
     def tuple(self) -> tuple[float, float]:
         return (self.x, self.y)
 
-
-# ==========================================================
-# Size
-# ==========================================================
-
 @dataclass(slots=True)
 class Size:
     width: float = 0.0
@@ -54,11 +44,6 @@ class Size:
     @property
     def is_empty(self) -> bool:
         return self.width <= 0 or self.height <= 0
-
-
-# ==========================================================
-# Rect
-# ==========================================================
 
 @dataclass(slots=True)
 class Rect:
@@ -146,11 +131,6 @@ class Rect:
             or self.top >= other.bottom
         )
 
-
-# ==========================================================
-# Padding
-# ==========================================================
-
 @dataclass(slots=True)
 class Padding:
     left: float = 0.0
@@ -165,11 +145,6 @@ class Padding:
     @property
     def vertical(self) -> float:
         return self.top + self.bottom
-
-
-# ==========================================================
-# Margin
-# ==========================================================
 
 @dataclass(slots=True)
 class Margin:

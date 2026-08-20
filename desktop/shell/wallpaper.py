@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import pygame
 
-
 class Wallpaper:
 
     def __init__(self):
@@ -30,8 +29,6 @@ class Wallpaper:
     def draw(self, renderer, width: int, height: int):
 
         surface = renderer.surface
-
-        # If no image, use gradient fallback (matches Figma style better than flat color)
 
         if self.image is None:
 
@@ -77,4 +74,3 @@ class Wallpaper:
                 overlay,
                 (0, 0),
             )
-

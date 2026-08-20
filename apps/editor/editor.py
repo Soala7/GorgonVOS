@@ -4,7 +4,6 @@ VOS Text Editor Application
 
 from apps.editor.editor_window import EditorWindow
 
-
 class TextEditor:
 
     def __init__(self, service_manager):

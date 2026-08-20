@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import pygame
 
-
 class DockIcon:
 
     SIZE = 56
@@ -29,10 +28,6 @@ class DockIcon:
 
         self.position = pygame.Vector2()
 
-    # --------------------------------------------------
-    # Draw
-    # --------------------------------------------------
-
     def draw(
         self,
         renderer,
@@ -42,10 +37,6 @@ class DockIcon:
 
         x = int(self.position.x)
         y = int(self.position.y)
-
-        #
-        # Shadow
-        #
 
         shadow = pygame.Surface(
             (54, 18),
@@ -66,10 +57,6 @@ class DockIcon:
             ),
         )
 
-        #
-        # Icon Background
-        #
-
         pygame.draw.circle(
             surface,
             (215, 215, 220),
@@ -79,10 +66,6 @@ class DockIcon:
             ),
             24,
         )
-
-        #
-        # Running Indicator
-        #
 
         if self.running:
 
@@ -95,4 +78,3 @@ class DockIcon:
                 ),
                 3,
             )
-        

@@ -15,7 +15,6 @@ class Rect:
         self.width = 200
         self.height = 100
 
-
 def main():
 
     pygame.init()
@@ -60,7 +59,6 @@ def main():
     pygame.quit()
 
     print("Draw helper tests passed.")
-
 
 if __name__ == "__main__":
     main()

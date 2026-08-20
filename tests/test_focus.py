@@ -1,7 +1,6 @@
 from desktop.ui.core.component import Component
 from desktop.ui.core.focus import FocusManager
 
-
 def main():
 
     manager = FocusManager()
@@ -24,7 +23,6 @@ def main():
     assert manager.focused is None
 
     print("Focus tests passed.")
-
 
 if __name__ == "__main__":
     main()

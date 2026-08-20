@@ -2,21 +2,21 @@ import json
 import os
 
 class VirtualDisk:
-    def __init__(self, 
-                 disk_image_file="vos_disk.img", 
-                 disk_size=1024 * 1024, 
+    def __init__(self,
+                 disk_image_file="vos_disk.img",
+                 disk_size=1024 * 1024,
                  block_size=4096):
         self.disk_image_file = disk_image_file
         self.disk_size = disk_size
         self.block_size = block_size
-        
+
         self.total_blocks = self.disk_size // self.block_size
         self.block_offsets = [i * self.block_size for i in range(self.total_blocks)]
-        
+
         self.block_used = [0]
         self.block_free = list(range(1, self.total_blocks))
         self.file_table = {}
-        
+
         self.load()
 
     def load(self):
@@ -41,7 +41,7 @@ class VirtualDisk:
             raise RuntimeError("No free blocks available.")
         allocated_block = self.block_free.pop(0)
         self.block_used.append(allocated_block)
-        return allocated_block        
+        return allocated_block
 
     def write_raw_block(self, block_index, data):
         if not os.path.exists(self.disk_image_file):
@@ -78,7 +78,7 @@ class VirtualDisk:
             raise FileExistsError(f"File '{file_name}' already exists.")
 
         binary_content = content.encode("utf-8") if isinstance(content, str) else content
-        
+
         if len(binary_content) == 0:
             block_num = self.allocate_block()
             self.write_raw_block(block_num, b"")
@@ -96,7 +96,7 @@ class VirtualDisk:
             block_num = self.allocate_block()
             allocated_chunks.append(block_num)
             self.write_raw_block(block_num, chunk)
-            
+
         self.file_table[file_name] = {"blocks": allocated_chunks, "size": len(binary_content)}
         self.save()
 
@@ -112,7 +112,7 @@ class VirtualDisk:
     def delete_file(self, file_name):
         if file_name not in self.file_table:
             raise KeyError(f"File '{file_name}' does not exist.")
-        
+
         file_info = self.file_table.pop(file_name)
         for block_num in file_info["blocks"]:
             self.block_used.remove(block_num)
@@ -122,8 +122,6 @@ class VirtualDisk:
         self.save()
         return True
 
-
-# Usage / CLI Interface
 if __name__ == "__main__":
     vdisk = VirtualDisk()
     print("Block size:", vdisk.block_size)
@@ -156,10 +154,3 @@ if __name__ == "__main__":
             print(f"File '{file_name}' deleted successfully.")
         except KeyError as e:
             print(e)
-
-
-
-
-
-
-                 

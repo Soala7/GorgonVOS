@@ -3,7 +3,6 @@ import pygame
 from desktop.shell.wallpaper import Wallpaper
 from desktop.renderer.pygame_renderer import PygameRenderer
 
-
 def main():
 
     pygame.init()
@@ -29,7 +28,6 @@ def main():
     pygame.quit()
 
     print("Wallpaper render test passed.")
-
 
 if __name__ == "__main__":
 

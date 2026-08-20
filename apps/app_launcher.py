@@ -1,16 +1,15 @@
-# apps/app_launcher.py
+
 """Application launcher system"""
-from apps.browser.browser import BrowserWindow
 
 class AppLauncher:
     _instance = None
-    
+
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance._init_apps()
         return cls._instance
-    
+
     def _init_apps(self):
         """Initialize app registry"""
         self.apps = {}
@@ -34,7 +33,7 @@ class AppLauncher:
             '.mp4': 'video_player',
             '.avi': 'video_player',
         }
-    
+
     def launch_app(self, app_name, file_path=None):
         """Launch an application"""
         if app_name == 'explorer':
@@ -48,7 +47,7 @@ class AppLauncher:
         else:
             print(f"[VOS] Unknown app: {app_name}")
             return False
-    
+
     def _launch_explorer(self):
         """Launch explorer"""
         try:
@@ -59,15 +58,15 @@ class AppLauncher:
         except Exception as e:
             print(f"[VOS] Failed to launch explorer: {e}")
             return False
-    
+
     def _launch_editor(self, file_path=None):
         """Launch text editor"""
         try:
             from apps.editor.editor import TextEditorApp
-            # If file_path provided, load content
+
             content = ""
             filename = "Untitled"
-            
+
             if file_path:
                 import os
                 filename = os.path.basename(file_path)
@@ -76,14 +75,14 @@ class AppLauncher:
                         content = f.read()
                 except:
                     pass
-            
+
             editor = TextEditorApp(filename, content, file_path)
             editor.show()
             return True
         except Exception as e:
             print(f"[VOS] Failed to launch editor: {e}")
             return False
-    
+
     def _launch_terminal(self):
         """Launch terminal"""
         try:
@@ -93,16 +92,17 @@ class AppLauncher:
             return True
         except:
             return False
-    
+
     def _launch_browser(self):
         """Launch browser"""
         try:
+            from apps.browser.browser import BrowserWindow
             browser = BrowserWindow()
             browser.show()
             return True
         except:
             return False
-    
+
     def get_file_association(self, extension):
         """Get app for file extension"""
         return self.associations.get(extension.lower(), None)

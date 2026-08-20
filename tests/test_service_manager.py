@@ -14,6 +14,5 @@ def test_service_manager():
 
     print("✓ ServiceManager test passed")
 
-
 if __name__ == "__main__":
     test_service_manager()

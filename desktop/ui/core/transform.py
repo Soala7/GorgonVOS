@@ -13,7 +13,6 @@ from dataclasses import dataclass, field
 
 from desktop.ui.utils.geometry import Point, Size, Rect
 
-
 @dataclass(slots=True)
 class Transform:
     """
@@ -44,10 +43,6 @@ class Transform:
 
     z_index: int = 0
 
-    # ======================================================
-    # Position
-    # ======================================================
-
     def move(self, dx: float, dy: float) -> None:
         self.position.translate(dx, dy)
         self.mark_dirty()
@@ -56,10 +51,6 @@ class Transform:
         self.position.x = x
         self.position.y = y
         self.mark_dirty()
-
-    # ======================================================
-    # Size
-    # ======================================================
 
     def resize(self, width: float, height: float) -> None:
         self.size.width = max(0.0, width)
@@ -70,10 +61,6 @@ class Transform:
         self.size = size.copy()
         self.mark_dirty()
 
-    # ======================================================
-    # Scale
-    # ======================================================
-
     def set_scale(self, sx: float, sy: float | None = None) -> None:
         if sy is None:
             sy = sx
@@ -83,10 +70,6 @@ class Transform:
 
         self.mark_dirty()
 
-    # ======================================================
-    # Rotation
-    # ======================================================
-
     def rotate(self, angle: float) -> None:
         self.rotation += angle
         self.mark_dirty()
@@ -94,10 +77,6 @@ class Transform:
     def set_rotation(self, angle: float) -> None:
         self.rotation = angle
         self.mark_dirty()
-
-    # ======================================================
-    # Visibility
-    # ======================================================
 
     def show(self) -> None:
         self.visible = True
@@ -107,19 +86,11 @@ class Transform:
         self.visible = False
         self.mark_dirty()
 
-    # ======================================================
-    # Enabled
-    # ======================================================
-
     def enable(self) -> None:
         self.enabled = True
 
     def disable(self) -> None:
         self.enabled = False
-
-    # ======================================================
-    # Opacity
-    # ======================================================
 
     @property
     def opacity(self) -> float:
@@ -133,22 +104,11 @@ class Transform:
             self._opacity = value
             self.mark_dirty()
 
-    # ======================================================
-    # Dirty State
-    # ======================================================
-
     def mark_dirty(self) -> None:
         self.dirty = True
 
     def clear_dirty(self) -> None:
         self.dirty = False
-
-    # ======================================================
-    # Utility
-    # ======================================================
-        # ======================================================
-    # Bounds
-    # ======================================================
 
     def bounds(self) -> Rect:
         """

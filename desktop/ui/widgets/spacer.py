@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from desktop.ui.widgets.widget import Widget
 
-
 class Spacer(Widget):
     """
     Invisible widget used to create empty space in layouts.
@@ -26,5 +25,5 @@ class Spacer(Widget):
         self.transform.resize(width, height)
 
     def on_draw(self, renderer) -> None:
-        # Spacer intentionally draws nothing.
+
         pass

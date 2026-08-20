@@ -1,12 +1,10 @@
 from desktop.ui.widgets.textbox import TextBox
 from desktop.ui.core.event import KeyPressEvent
 
-
 class DummyRenderer:
 
     def draw_textbox(self, **kwargs):
         pass
-
 
 def main():
 
@@ -32,7 +30,6 @@ def main():
     textbox.on_draw(DummyRenderer())
 
     print("Textbox tests passed.")
-
 
 if __name__ == "__main__":
     main()

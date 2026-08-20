@@ -11,7 +11,6 @@ import pygame
 from desktop.ui.widgets.panel import Panel
 from desktop.ui.core.component import Component
 
-
 class DesktopIcons(Panel):
 
     def __init__(self) -> None:
@@ -43,8 +42,6 @@ class DesktopIcons(Panel):
 
         for name, (x, y) in self.icons:
 
-            # icon
-
             pygame.draw.circle(
                 surface,
                 (210, 210, 220),
@@ -54,8 +51,6 @@ class DesktopIcons(Panel):
                 ),
                 24,
             )
-
-            # text
 
             renderer.draw_text(
                 name,

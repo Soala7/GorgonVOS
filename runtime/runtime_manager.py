@@ -2,7 +2,6 @@ from core.logger import Logger
 from core.event_bus import EventBus
 from core.services_manager import ServiceManager
 
-
 class RuntimeManager:
     def __init__(self, kernel):
         self.kernel = kernel
@@ -17,29 +16,21 @@ class RuntimeManager:
 
         self.state = "STOPPED"
 
-    # ----------------------------
-    # BOOT SEQUENCE
-    # ----------------------------
     def start(self):
         self.logger.info("Runtime starting...")
 
         self.state = "STARTING"
 
-        # Initialize subsystems
         self._init_process_table()
         self._init_session_manager()
         self._init_app_manager()
 
-        # Emit runtime ready event
         self.event_bus.emit("runtime:ready", {})
 
         self.state = "RUNNING"
 
         self.logger.info("Runtime fully started.")
 
-    # ----------------------------
-    # SHUTDOWN SEQUENCE
-    # ----------------------------
     def shutdown(self):
         self.logger.info("Runtime shutting down...")
 
@@ -58,9 +49,6 @@ class RuntimeManager:
 
         self.logger.info("Runtime stopped.")
 
-    # ----------------------------
-    # INTERNAL INIT METHODS
-    # ----------------------------
     def _init_process_table(self):
         from runtime.process_table import ProcessTable
         self.process_table = ProcessTable(self.event_bus)

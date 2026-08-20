@@ -1,8 +1,7 @@
-# runtime/session_manager.py
+
 
 import time
 from core.logger import Logger
-
 
 class Session:
     """
@@ -17,23 +16,19 @@ class Session:
         self.created_at = time.time()
         self.closed_at = None
 
-        self.processes = []  # PIDs owned by this session
-
+        self.processes = []
 
     def add_process(self, pid):
         if pid not in self.processes:
             self.processes.append(pid)
 
-
     def remove_process(self, pid):
         if pid in self.processes:
             self.processes.remove(pid)
 
-
     def close(self):
         self.state = "CLOSED"
         self.closed_at = time.time()
-
 
 class SessionManager:
     """
@@ -50,9 +45,6 @@ class SessionManager:
         self.active_session = None
         self.next_session_id = 1
 
-    # ----------------------------
-    # SESSION CREATION
-    # ----------------------------
     def create_session(self, user):
         session_id = self.next_session_id
         self.next_session_id += 1
@@ -72,9 +64,6 @@ class SessionManager:
 
         return session
 
-    # ----------------------------
-    # SESSION CONTROL
-    # ----------------------------
     def close_session(self, session_id):
         session = self.sessions.get(session_id)
 
@@ -84,7 +73,6 @@ class SessionManager:
 
         session.close()
 
-        # terminate all processes owned by session
         for pid in list(session.processes):
             self.process_table.terminate_process(pid)
 
@@ -106,9 +94,6 @@ class SessionManager:
         for session_id in list(self.sessions.keys()):
             self.close_session(session_id)
 
-    # ----------------------------
-    # QUERY METHODS
-    # ----------------------------
     def get_active_session(self):
         return self.active_session
 

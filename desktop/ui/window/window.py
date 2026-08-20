@@ -14,7 +14,7 @@ class Window(Panel):
     TITLEBAR_HEIGHT = 38
     BORDER_RADIUS = 18
     BUTTON_SIZE = 24
-    BUTTON_SPACING = 12  # Unified spacing for both drawing and clicking
+    BUTTON_SPACING = 12
 
     def __init__(
         self,
@@ -43,7 +43,7 @@ class Window(Panel):
         self.dragging = False
         self.resizing = False
         self.resize_edge = None
-        self.resize_margin = 6  # Slightly wider for better accessibility
+        self.resize_margin = 6
 
         self.min_width = 400
         self.min_height = 300
@@ -54,10 +54,10 @@ class Window(Panel):
         self.target_y = self.transform.position.y
         self.titlebar_height = 38
         self.font = pygame.font.SysFont("DejaVu Sans Mono", 18, bold=True)
+        self.content_cursor = cursor_manager.DEFAULT
 
-    # In your Desktop / OS main update loop:
     def update(self, dt):
-       # Reset cursor to default each frame so widgets must actively claim hover states
+
         cursor_manager.set(cursor_manager.DEFAULT)
 
         for widget in self.widgets:
@@ -93,45 +93,35 @@ class Window(Panel):
 
         x, y = int(self.transform.position.x), int(self.transform.position.y)
         w, h = int(self.transform.size.width), int(self.transform.size.height)
-        
-        # Dynamically determine corner radius
+
         current_radius = 0 if self.maximized else self.BORDER_RADIUS
 
-        # Shadow Effect (only draw if not maximized so it doesn't bleed off screen)
         if not self.maximized:
             shadow = pygame.Surface((w + 16, h + 16), pygame.SRCALPHA)
             pygame.draw.rect(shadow, (0, 0, 0, 45), shadow.get_rect(), border_radius=current_radius + 6)
             surface.blit(shadow, (x - 8, y - 4))
 
-        # Create an alpha-supported surface for window transparency
         window_surface = pygame.Surface((w, h), pygame.SRCALPHA)
 
-        # Set transparent colors
         border = (20, 20, 22, 215) if self.active else (70, 70, 80, 215)
         titlebar_color = (42, 42, 48, 230)
 
-        # Window Frame Background (drawn locally at 0,0 on the temporary surface)
         pygame.draw.rect(window_surface, border, window_surface.get_rect(), border_radius=current_radius)
         pygame.draw.rect(window_surface, border, window_surface.get_rect(), 1, border_radius=current_radius)
 
-        # Title bar background
         titlebar = pygame.Rect(0, 0, w, self.TITLEBAR_HEIGHT)
         pygame.draw.rect(window_surface, titlebar_color, titlebar, border_top_left_radius=current_radius, border_top_right_radius=current_radius)
 
-        # Blit the transparent window surface to the main renderer
         surface.blit(window_surface, (x, y))
 
-        # Text and Buttons can be drawn normally over the main surface
         renderer.draw_text(self.title, self.font, (235, 235, 235), pygame.Vector2(x + 16, y + 9))
 
-        # Buttons Rendering Layout
         close_rect, maximize_rect, minimize_rect = self._get_button_rects(x, y, w)
 
         pygame.draw.rect(surface, (70, 70, 78), minimize_rect, border_radius=6)
         pygame.draw.rect(surface, (70, 70, 78), maximize_rect, border_radius=6)
         pygame.draw.rect(surface, (150, 60, 60), close_rect, border_radius=6)
 
-        # Icons markup code...
         pygame.draw.line(surface, (230, 230, 230), (minimize_rect.x + 6, minimize_rect.centery), (minimize_rect.right - 6, minimize_rect.centery), 2)
         if self.maximized:
             pygame.draw.rect(surface, (230, 230, 230), pygame.Rect(maximize_rect.x + 7, maximize_rect.y + 9, 8, 8), 2)
@@ -174,8 +164,8 @@ class Window(Panel):
 
     def get_resize_edge(self, mx, my):
         if self.maximized:
-            return None  # Can't resize maximized window
-            
+            return None
+
         x, y = self.transform.position.x, self.transform.position.y
         w, h = self.transform.size.width, self.transform.size.height
         m = self.resize_margin
@@ -204,7 +194,6 @@ class Window(Panel):
         if isinstance(event, MousePressEvent) and event.button == MouseButton.LEFT:
             close_rect, maximize_rect, minimize_rect = self._get_button_rects(x, y, w)
 
-            # 1. UI Window Control Hits (Priority #1)
             if close_rect.collidepoint(event.x, event.y):
                 self.close()
                 event.handled = True
@@ -219,7 +208,6 @@ class Window(Panel):
                 event.handled = True
                 return
 
-            # 2. Resize Border Checking (Priority #2)
             edge = self.get_resize_edge(event.x, event.y)
             if edge and self.resizable:
                 self.resizing = True
@@ -227,7 +215,6 @@ class Window(Panel):
                 event.handled = True
                 return
 
-            # 3. Titlebar Drag Checking (Priority #3)
             titlebar_rect = pygame.Rect(x, y, w - 120, self.TITLEBAR_HEIGHT)
             if titlebar_rect.collidepoint(event.x, event.y) and self.draggable and not self.maximized:
                 self.dragging = True
@@ -240,20 +227,19 @@ class Window(Panel):
             self.dragging = False
             self.resizing = False
             self.resize_edge = None
+            cursor_manager.set(self.content_cursor)
 
         elif isinstance(event, MouseMoveEvent):
-            # Check if mouse is inside this window's bounds
+
             in_window = x <= event.x <= x + w and y <= event.y <= y + h
 
-            # Only track systemic cursor icons if not actively dragging or resizing
             if not self.dragging and not self.resizing:
                 if not in_window:
                     cursor_manager.set(cursor_manager.DEFAULT)
                 else:
                     edge = self.get_resize_edge(event.x, event.y)
                     close_rect, maximize_rect, minimize_rect = self._get_button_rects(x, y, w)
-                    
-                    # Strictly limit titlebar move region to the draggable bar area (excluding buttons)
+
                     titlebar_rect = pygame.Rect(x, y, minimize_rect.x - x, self.TITLEBAR_HEIGHT)
 
                     if edge in ("left", "right"):
@@ -269,9 +255,8 @@ class Window(Panel):
                     elif titlebar_rect.collidepoint(event.x, event.y) and self.draggable and not self.maximized:
                         cursor_manager.set(cursor_manager.MOVE)
                     else:
-                        cursor_manager.set(cursor_manager.DEFAULT)
+                        cursor_manager.set(self.content_cursor)
 
-            # Process window resizing transformations
             if self.resizing:
                 if "right" in self.resize_edge:
                     w = max(self.min_width, event.x - x)
@@ -292,30 +277,8 @@ class Window(Panel):
                 event.handled = True
                 return
 
-            # Process window dragging movement
             if self.dragging:
                 self.transform.position.x = event.x - self.drag_offset_x
                 self.transform.position.y = event.y - self.drag_offset_y
                 event.handled = True
                 return
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                

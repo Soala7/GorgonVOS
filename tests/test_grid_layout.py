@@ -2,7 +2,6 @@ from desktop.ui.layout.grid_layout import GridLayout
 from desktop.ui.core.container import Container
 from desktop.ui.core.component import Component
 
-
 def main():
 
     container = Container()
@@ -40,7 +39,6 @@ def main():
     assert children[3].transform.position.y == 35
 
     print("Grid layout tests passed.")
-
 
 if __name__ == "__main__":
     main()

@@ -9,7 +9,6 @@ from __future__ import annotations
 import time
 import pygame
 
-
 class BootScreen:
 
     def __init__(self,logo=None,duration: float = 3.0,) -> None:
@@ -21,10 +20,6 @@ class BootScreen:
         self.start_time = None
 
         self.finished = False
-
-    # --------------------------------------------------
-    # Boot
-    # --------------------------------------------------
 
     def start(self) -> None:
 
@@ -54,10 +49,6 @@ class BootScreen:
             (time.time() - self.start_time) / self.duration,
             1.0,
         )
-
-    # --------------------------------------------------
-    # Draw
-    # --------------------------------------------------
 
     def draw(self,renderer) -> None:
 

@@ -15,40 +15,24 @@ from desktop.ui.core.event import UIEvent
 from desktop.ui.core.transform import Transform
 from desktop.ui.utils.geometry import Point
 
-
 class Component:
     """Base class for every UI component."""
 
     _next_id: int = 1
 
     def __init__(self, name: str = "Component") -> None:
-        # --------------------------------------------------
-        # Identity
-        # --------------------------------------------------
 
         self.id: int = Component._next_id
         Component._next_id += 1
 
         self.name: str = name
 
-        # --------------------------------------------------
-        # Hierarchy
-        # --------------------------------------------------
-
         self.parent: Component | None = None
         self.children: list[Component] = []
-        # Rendering
+
         self.layer: int = 0
 
-        # --------------------------------------------------
-        # Transform
-        # --------------------------------------------------
-
         self.transform = Transform()
-
-        # --------------------------------------------------
-        # State
-        # --------------------------------------------------
 
         self.focusable = False
 
@@ -58,25 +42,13 @@ class Component:
 
         self._destroyed = False
 
-        # --------------------------------------------------
-        # Appearance
-        # --------------------------------------------------
-
         self.tooltip = ""
 
         self.cursor = None
 
-        # --------------------------------------------------
-        # User Data
-        # --------------------------------------------------
-
         self.user_data: dict[str, Any] = {}
 
         self.on_create()
-
-    # ======================================================
-    # Hierarchy
-    # ======================================================
 
     def add_child(self, child: "Component") -> None:
 
@@ -101,10 +73,6 @@ class Component:
             child.parent = None
 
         self.children.clear()
-
-    # ======================================================
-    # Searching
-    # ======================================================
 
     def find_by_id(self, component_id: int) -> "Component | None":
 
@@ -134,10 +102,6 @@ class Component:
 
         return None
 
-    # ======================================================
-    # Geometry
-    # ======================================================
-
     def contains_point(self, point: Point) -> bool:
         return self.transform.bounds.contains(point)
 
@@ -157,20 +121,12 @@ class Component:
 
         return Point(x, y)
 
-    # ======================================================
-    # Update
-    # ======================================================
-
     def update(self, dt: float) -> None:
 
         self.on_update(dt)
 
         for child in self.children:
             child.update(dt)
-
-    # ======================================================
-    # Drawing
-    # ======================================================
 
     def draw(self, renderer) -> None:
 
@@ -182,10 +138,6 @@ class Component:
         ):
             child.draw(renderer)
 
-    # ======================================================
-    # Events
-    # ======================================================
-
     def handle_event(self, event: UIEvent) -> None:
 
         for child in reversed(self.children):
@@ -194,10 +146,6 @@ class Component:
                 return
 
             child.handle_event(event)
-
-    # ======================================================
-    # Destroy
-    # ======================================================
 
     def destroy(self) -> None:
 
@@ -208,10 +156,6 @@ class Component:
     @property
     def destroyed(self) -> bool:
         return self._destroyed
-
-    # ======================================================
-    # Lifecycle Hooks
-    # ======================================================
 
     def on_create(self) -> None:
         pass
@@ -236,10 +180,6 @@ class Component:
 
     def on_disable(self) -> None:
         pass
-
-    # ======================================================
-    # Debugging
-    # ======================================================
 
     def __repr__(self) -> str:
 

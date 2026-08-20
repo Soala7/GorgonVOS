@@ -1,6 +1,5 @@
 import pygame
 
-
 class ExplorerRender:
     """Complete Renderer module for VOS File Explorer.
 
@@ -23,7 +22,6 @@ class ExplorerRender:
 
             scale = max(0.65, min(ww / 920.0, wh / 620.0))
 
-            # Fonts
             font_main = pygame.font.SysFont("Segoe UI", max(11, int(15 * scale)))
             font_small = pygame.font.SysFont("Segoe UI", max(9, int(12 * scale)))
             font_greeting = pygame.font.SysFont(
@@ -33,15 +31,12 @@ class ExplorerRender:
                 "Segoe UI", max(9, int(11 * scale))
             )
 
-            # Main window surface
             window_surf = pygame.Surface((ww, wh), pygame.SRCALPHA)
 
-            # Base Window Layer
             pygame.draw.rect(
                 window_surf, (22, 22, 24, 120), (0, 0, ww, wh), border_radius=18
             )
 
-            # Solid Top Bar
             pygame.draw.rect(
                 window_surf,
                 (5, 5, 5, 245),
@@ -50,10 +45,8 @@ class ExplorerRender:
                 border_top_right_radius=16,
             )
 
-            # Top Navigation Buttons
             self._draw_navigation_buttons(window_surf, scale)
 
-            # Panel Layout Calculations
             left_w = max(145, int(ww * 0.185))
             center_w = max(48, int(ww * 0.065))
             bottom_margin = int(20 * scale)
@@ -75,7 +68,6 @@ class ExplorerRender:
             content_w = max(180, ww - content_x - right_margin)
             content_h = max(180, wh - self.TITLEBAR_HEIGHT - bottom_margin - 10)
 
-            # Draw UI Panels
             self._draw_left_panel(
                 window_surf, left_panel_rect, rel_x, rel_y, font_main, scale
             )
@@ -95,10 +87,8 @@ class ExplorerRender:
                 scale,
             )
 
-            # Render Window Surface onto Global Renderer Display
             surface.blit(window_surf, (wx, wy))
 
-            # Render Drag Ghost directly on screen surface (Trackpad / Touch support)
             if getattr(self, "dragging", False) and getattr(
                 self, "dragging_item", None
             ):
@@ -120,7 +110,6 @@ class ExplorerRender:
         card_sz = icon_sz + 20
         ghost_surf = pygame.Surface((card_sz, card_sz), pygame.SRCALPHA)
 
-        # Draw dragged item card overlay
         pygame.draw.rect(
             ghost_surf, (40, 40, 45, 190), (0, 0, card_sz, card_sz), border_radius=10
         )
@@ -140,7 +129,6 @@ class ExplorerRender:
         if icon:
             ghost_surf.blit(icon, (10, 10))
 
-        # Position ghost box centered on pointer position
         surface.blit(ghost_surf, (mx - (card_sz // 2), my - (card_sz // 2)))
 
     def _draw_navigation_buttons(self, surface, scale):
@@ -614,6 +602,10 @@ class ExplorerRender:
         items = self._get_folder_items(self.current_folder)
         self.item_rects = []
 
+        self._draw_breadcrumb(
+            surface, content_x, grid_start_y - int(20 * scale), scale, font_small
+        )
+
         if not items:
             txt = font_small.render("This folder is empty", True, (150, 150, 150))
             surface.blit(txt, (content_x + 20, grid_start_y + 20))
@@ -624,10 +616,6 @@ class ExplorerRender:
         items_per_row = max(1, int((content_w - padding) / (icon_size + padding)))
 
         x = content_x
-        self._draw_breadcrumb(
-            surface, content_x, grid_start_y - int(20 * scale), scale, font_small
-        )
-
         grid_y = grid_start_y + int(10 * scale)
         col = 0
 
@@ -638,7 +626,6 @@ class ExplorerRender:
             item_rect = pygame.Rect(x, grid_y, icon_size, icon_size + 30)
             self.item_rects.append((item_rect, item))
 
-            # Highlight drop target folder while dragging over it
             is_drop_target = getattr(self, "drop_target", None) is item
 
             if is_drop_target:
@@ -746,29 +733,3 @@ class ExplorerRender:
 
     def _draw_context_menu(self, surface, x, y, items, scale):
         pass
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

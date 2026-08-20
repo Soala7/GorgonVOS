@@ -4,7 +4,6 @@ VOS Terminal Application
 
 from apps.terminal.terminal_window import TerminalWindow
 
-
 class Terminal:
 
     def __init__(self, service_manager):
@@ -17,26 +16,21 @@ class Terminal:
 
         self.window_manager = None
 
-
     def open(self):
 
         print("Opening terminal")
-
 
         if not self.window_manager:
             print("No WindowManager")
             return
 
-
         if self.window in self.window_manager.windows:
 
             print("Already open")
 
-
             if self.window_manager.active_window is self.window:
                 self.close()
                 return
-
 
             self.window_manager.focus_window(
                 self.window
@@ -44,29 +38,22 @@ class Terminal:
 
             return
 
-
-
         print("Adding window")
-
 
         if self.window.closed:
             self.window = TerminalWindow(
                 self.service_manager
             )
 
-
         self.window.restore()
-
 
         self.window_manager.add_window(
             self.window
         )
 
-
         self.window_manager.focus_window(
             self.window
         )
-
 
     def close(self):
 
@@ -76,16 +63,13 @@ class Terminal:
                 self.window
             )
 
-
     def update(self, dt):
 
         self.window.update(dt)
 
-
     def draw(self, renderer):
 
         self.window.draw(renderer)
-
 
     def handle_event(self, event):
 

@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from desktop.ui.core.component import Component
 
-
 class Widget(Component):
     """
     Base class for all interactive UI widgets.

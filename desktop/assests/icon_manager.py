@@ -13,10 +13,8 @@ from io import BytesIO
 import pygame
 import cairosvg
 
-
 class IconLoadError(Exception):
     """Raised when an icon asset cannot be loaded."""
-
 
 class IconManager:
 
@@ -39,11 +37,9 @@ class IconManager:
 
         key = (icon, size)
 
-        # Return cached icon
         if key in cls._cache:
             return cls._cache[key]
 
-        # Find icon file
         svg_path = cls.ROOT / f"{icon}.svg"
         png_path = cls.ROOT / f"{icon}.png"
 
@@ -51,10 +47,6 @@ class IconManager:
         file_type = None
 
         surface = None
-
-        # -----------------------
-        # Try SVG first
-        # -----------------------
 
         if svg_path.exists():
 
@@ -77,10 +69,6 @@ class IconManager:
 
                 print(f"[IconManager] SVG failed ({icon}), trying PNG...")
 
-        # -----------------------
-        # Try PNG if SVG failed
-        # -----------------------
-
         if surface is None and png_path.exists():
 
             try:
@@ -100,10 +88,6 @@ class IconManager:
 
                 print(f"[IconManager] PNG failed ({icon}): {e}")
 
-        # -----------------------
-        # Nothing loaded
-        # -----------------------
-
         if surface is None:
 
             print(f"[IconManager] Missing or invalid icon: {icon}")
@@ -119,7 +103,6 @@ class IconManager:
         )
 
         return surface
-
 
     @classmethod
     def clear_cache(cls):

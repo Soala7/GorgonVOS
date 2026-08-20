@@ -1,6 +1,5 @@
 from desktop.ui.widgets.panel import Panel
 
-
 class DummyRenderer:
 
     def draw_rect(self, *args):
@@ -8,7 +7,6 @@ class DummyRenderer:
 
     def draw_rect_outline(self, *args):
         pass
-
 
 def main():
 
@@ -27,7 +25,6 @@ def main():
     assert panel.border_width == 0
 
     print("Panel tests passed.")
-
 
 if __name__ == "__main__":
     main()

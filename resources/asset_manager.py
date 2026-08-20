@@ -9,7 +9,7 @@ from resources.paths import (
 )
 
 class AssetManager:
-    #Loads and caches image assets.
+
     def __init__(self):
         self.cache = ResourceCache()
 

@@ -1,6 +1,5 @@
 from desktop.ui.widgets.label import Label
 
-
 class DummyRenderer:
 
     def draw_text(
@@ -12,7 +11,6 @@ class DummyRenderer:
         align,
     ):
         pass
-
 
 def main():
 
@@ -30,7 +28,5 @@ def main():
 
     print("Label tests passed.")
 
-
 if __name__ == "__main__":
     main()
-    

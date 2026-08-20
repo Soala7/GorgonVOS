@@ -1,17 +1,10 @@
 from filesystem.filesystem import FileSystem
 
-
 fs = FileSystem()
-
 
 print("\n==============================")
 print(" FOLDER OPERATIONS TEST")
 print("==============================")
-
-
-# --------------------------------------------------
-# 1. CREATE FOLDERS
-# --------------------------------------------------
 
 print("\n--- CREATING FOLDERS ---")
 
@@ -21,22 +14,15 @@ result = fs.create_folder(
 
 print("Projects result:", result)
 
-
 result = fs.create_folder(
     "/users/guest/Documents/Projects/VOS"
 )
 
 print("VOS result:", result)
 
-
 print("\n--- AFTER FOLDER CREATION ---")
 
 print(fs.get_tree())
-
-
-# --------------------------------------------------
-# 2. CHECK FOLDER EXISTS
-# --------------------------------------------------
 
 print("\n--- CHECKING FOLDER ---")
 
@@ -46,11 +32,6 @@ folder = fs._get_folder(
 
 print("Folder found:", folder is not None)
 
-
-# --------------------------------------------------
-# 3. DELETE EMPTY FOLDER
-# --------------------------------------------------
-
 print("\n--- DELETING EMPTY FOLDER ---")
 
 result = fs.delete_folder(
@@ -59,15 +40,9 @@ result = fs.delete_folder(
 
 print("Delete VOS result:", result)
 
-
 print("\n--- AFTER DELETING VOS ---")
 
 print(fs.get_tree())
-
-
-# --------------------------------------------------
-# 4. CREATE NON-EMPTY FOLDER
-# --------------------------------------------------
 
 print("\n--- CREATING NON-EMPTY FOLDER ---")
 
@@ -80,15 +55,9 @@ fs.create_file(
     "This file prevents the folder from being deleted."
 )
 
-
 print("\n--- BEFORE NON-EMPTY DELETE ---")
 
 print(fs.get_tree())
-
-
-# --------------------------------------------------
-# 5. TRY TO DELETE NON-EMPTY FOLDER
-# --------------------------------------------------
 
 print("\n--- DELETING NON-EMPTY FOLDER ---")
 
@@ -97,11 +66,6 @@ result = fs.delete_folder(
 )
 
 print("Delete result:", result)
-
-
-# --------------------------------------------------
-# 6. VERIFY NON-EMPTY FOLDER STILL EXISTS
-# --------------------------------------------------
 
 print("\n--- CHECKING NON-EMPTY FOLDER ---")
 
@@ -117,11 +81,6 @@ file_content = fs.read_file(
 
 print("File still exists:", file_content)
 
-
-# --------------------------------------------------
-# 7. DELETE FILE FIRST
-# --------------------------------------------------
-
 print("\n--- DELETING FILE INSIDE FOLDER ---")
 
 result = fs.delete_file(
@@ -129,11 +88,6 @@ result = fs.delete_file(
 )
 
 print("Delete file result:", result)
-
-
-# --------------------------------------------------
-# 8. NOW DELETE EMPTY FOLDER
-# --------------------------------------------------
 
 print("\n--- DELETING NOW-EMPTY FOLDER ---")
 
@@ -143,11 +97,6 @@ result = fs.delete_folder(
 
 print("Delete folder result:", result)
 
-
-# --------------------------------------------------
-# 9. PERSISTENCE TEST
-# --------------------------------------------------
-
 print("\n--- CREATING PERSISTENCE TEST FOLDER ---")
 
 result = fs.create_folder(
@@ -156,24 +105,13 @@ result = fs.create_folder(
 
 print("Create result:", result)
 
-
 print("\n--- SAVING FILESYSTEM ---")
 
 fs.save()
 
-
-# --------------------------------------------------
-# 10. LOAD NEW FILESYSTEM INSTANCE
-# --------------------------------------------------
-
 print("\n--- LOADING NEW FILESYSTEM INSTANCE ---")
 
 fs2 = FileSystem()
-
-
-# --------------------------------------------------
-# 11. VERIFY PERSISTENCE
-# --------------------------------------------------
 
 print("\n--- CHECKING PERSISTENCE ---")
 
@@ -183,11 +121,9 @@ folder = fs2._get_folder(
 
 print("Persistent folder exists:", folder is not None)
 
-
 print("\n--- FINAL TREE ---")
 
 print(fs2.get_tree())
-
 
 print("\n==============================")
 print(" TEST COMPLETE")

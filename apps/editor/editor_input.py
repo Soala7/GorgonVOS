@@ -1,9 +1,8 @@
-# editor_input.py
+
 from __future__ import annotations
 import pygame
 from typing import Any
 from desktop.ui.core.event import KeyPressEvent, MousePressEvent, MouseWheelEvent
-
 
 class EditorInputHandler:
     """Processes user events, routing keystrokes and clicks to buffer and viewport controls."""
@@ -143,14 +142,3 @@ class EditorInputHandler:
         self.window.scroll_y -= scroll_val
         max_scroll = max(0, len(self.window.layout.visual_lines) - 1)
         self.window.scroll_y = max(0, min(self.window.scroll_y, max_scroll))
-
-
-
-
-
-
-
-
-
-
-

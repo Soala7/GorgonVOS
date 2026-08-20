@@ -17,42 +17,26 @@ WIDTH = 1600
 HEIGHT = 900
 FPS = 60
 
-
 def main() -> None:
 
-    # -----------------------------
-    # Initialize Pygame FIRST
-    # -----------------------------
     pygame.init()
-    #Makes the cursor disapper
+
     pygame.mouse.set_visible(False)
     pygame.display.set_caption("Gorgon VOS")
 
     screen = pygame.display.set_mode((WIDTH, HEIGHT),pygame.RESIZABLE)
 
-    # -----------------------------
-    # Window Manager
-    # -----------------------------
     window_manager = WindowManager()
 
     explorer = ExplorerWindow(window_manager)
     window_manager.add_window(explorer)
 
-    # -----------------------------
-    # Start VOS Kernel
-    # -----------------------------
     kernel = Kernel()
     kernel.boot()
 
-    # -----------------------------
-    # Graphics and Updating
-    # -----------------------------
     clock = pygame.time.Clock()
     renderer = PygameRenderer(screen)
 
-    # -----------------------------
-    # Boot Manager
-    # -----------------------------
     boot = BootManager(kernel)
 
     running = True
@@ -64,7 +48,7 @@ def main() -> None:
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
-                #tells logger about shutdown
+
                 kernel.shutdown()
                 running = False
 
@@ -73,6 +57,15 @@ def main() -> None:
 
         boot.update(dt)
 
+        lifecycle_action = boot.shell.consume_lifecycle_action()
+        if lifecycle_action == "shutdown":
+            kernel.shutdown()
+            running = False
+        elif lifecycle_action == "restart":
+            boot.restart_session(boot_again=True)
+        elif lifecycle_action == "logout":
+            boot.restart_session()
+
         renderer.begin_frame()
 
         boot.draw(renderer)
@@ -80,7 +73,6 @@ def main() -> None:
         renderer.end_frame()
 
     pygame.quit()
-
 
 if __name__ == "__main__":
     main()

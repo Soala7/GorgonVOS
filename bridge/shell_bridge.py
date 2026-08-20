@@ -9,13 +9,11 @@ import os
 
 from bridge.vos_api import vos_api
 
-
 PWD_CALLBACK = ctypes.CFUNCTYPE(
     None,
     ctypes.POINTER(ctypes.c_char),
     ctypes.c_int
 )
-
 
 LS_CALLBACK = ctypes.CFUNCTYPE(
     None,
@@ -24,12 +22,10 @@ LS_CALLBACK = ctypes.CFUNCTYPE(
     ctypes.c_int
 )
 
-
 CD_CALLBACK = ctypes.CFUNCTYPE(
     ctypes.c_int,
     ctypes.c_char_p
 )
-
 
 MKDIR_CALLBACK = ctypes.CFUNCTYPE(
     ctypes.c_int,
@@ -96,25 +92,17 @@ class ShellBridge:
             "libvos_shell.so"
         )
 
-
         self.shell = ctypes.CDLL(
             os.path.abspath(shell_path)
         )
-
-
-        # Shell API
 
         self.shell.vos_shell_init.restype = None
         self.shell.vos_shell_execute.restype = ctypes.c_char_p
         self.shell.vos_shell_shutdown.restype = None
 
-
         self.shell.vos_shell_execute.argtypes = [
             ctypes.c_char_p
         ]
-
-
-        # Callback registration
 
         self.shell.host_register_pwd.argtypes = [
             PWD_CALLBACK
@@ -164,13 +152,9 @@ class ShellBridge:
 
         self.shell.vos_shell_init()
 
-
         self._register_callbacks()
 
-
-
     def _register_callbacks(self):
-
 
         def pwd_callback(buffer, size):
 
@@ -178,13 +162,11 @@ class ShellBridge:
 
             data = vos_api.pwd().encode()
 
-
             ctypes.memset(
                 buffer,
                 0,
                 size
             )
-
 
             ctypes.memmove(
                 buffer,
@@ -195,12 +177,9 @@ class ShellBridge:
                 )
             )
 
-
-
         def ls_callback(path, buffer, size):
 
             print("[HOST CALLBACK] ls called")
-
 
             path_value = (
                 path.decode()
@@ -208,18 +187,15 @@ class ShellBridge:
                 else None
             )
 
-
             data = vos_api.ls(
                 path_value
             ).encode()
-
 
             ctypes.memset(
                 buffer,
                 0,
                 size
             )
-
 
             ctypes.memmove(
                 buffer,
@@ -230,17 +206,13 @@ class ShellBridge:
                 )
             )
 
-
-
         def cd_callback(path):
 
             print("[HOST CALLBACK] cd called")
 
-
             success = vos_api.cd(
                 path.decode()
             )
-
 
             return 1 if success else 0
 
@@ -248,11 +220,9 @@ class ShellBridge:
 
             print("[HOST CALLBACK] mkdir called")
 
-
             success = vos_api.mkdir(
                 path.decode()
             )
-
 
             return 1 if success else 0
 
@@ -272,17 +242,14 @@ class ShellBridge:
 
             print("[HOST CALLBACK] write called")
 
-
             path_string = path.decode("utf-8")
 
             content_string = content.decode("utf-8")
-
 
             success = vos_api.write(
                 path_string,
                 content_string
             )
-
 
             return 1 if success else 0
 
@@ -342,16 +309,13 @@ class ShellBridge:
 
             print("[HOST CALLBACK] tree called")
 
-
             data = vos_api.tree().encode()
-
 
             ctypes.memset(
                 buffer,
                 0,
                 size
             )
-
 
             ctypes.memmove(
                 buffer,
@@ -366,16 +330,13 @@ class ShellBridge:
 
             print("[HOST CALLBACK] mv called")
 
-
             source_string = source.decode("utf-8")
             destination_string = destination.decode("utf-8")
-
 
             success = vos_api.mv(
                 source_string,
                 destination_string
             )
-
 
             return 1 if success else 0
 
@@ -383,16 +344,13 @@ class ShellBridge:
 
             print("[HOST CALLBACK] cp called")
 
-
             source_string = source.decode("utf-8")
             destination_string = destination.decode("utf-8")
-
 
             success = vos_api.cp(
                 source_string,
                 destination_string
             )
-
 
             return 1 if success else 0
 
@@ -467,7 +425,7 @@ class ShellBridge:
         self.shell.host_register_write(
             self.write_callback
         )
-        
+
         self.shell.host_register_cat(
             self.cat_callback
         )
@@ -499,8 +457,6 @@ class ShellBridge:
         )
 
         return result.decode()
-
-
 
     def shutdown(self):
 

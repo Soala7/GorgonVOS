@@ -1,6 +1,5 @@
 from desktop.ui.utils.geometry import Point, Rect
 
-
 def main():
     p1 = Point(0, 0)
     p2 = Point(3, 4)
@@ -23,7 +22,6 @@ def main():
     assert r1.y == 15
 
     print("Geometry tests passed.")
-
 
 if __name__ == "__main__":
     main()

@@ -3,9 +3,8 @@ import pygame
 from resources.cache import ResourceCache
 from resources.paths import SOUNDS
 
-
 class SoundManager:
-    #Loads and caches sound effects.
+
     def __init__(self):
         self.cache = ResourceCache()
 

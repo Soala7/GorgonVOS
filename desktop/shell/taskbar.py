@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import pygame
 
-
 class Taskbar:
 
     HEIGHT = 72
@@ -37,10 +36,6 @@ class Taskbar:
         x = (width - dock_width) // 2
         y = height - 95
 
-        # -----------------------------
-        # Dock Background
-        # -----------------------------
-
         pygame.draw.rect(
             surface,
             (36, 40, 50),
@@ -52,10 +47,6 @@ class Taskbar:
             ),
             border_radius=self.RADIUS,
         )
-
-        # -----------------------------
-        # Start Button
-        # -----------------------------
 
         start_x = x + 42
         start_y = y + dock_height // 2
@@ -69,10 +60,6 @@ class Taskbar:
             ),
             18,
         )
-
-        # -----------------------------
-        # Icons
-        # -----------------------------
 
         icon_x = start_x + 55
 
@@ -88,8 +75,6 @@ class Taskbar:
                 15,
             )
 
-            # Running indicator
-
             pygame.draw.circle(
                 surface,
                 (90, 170, 255),
@@ -101,10 +86,6 @@ class Taskbar:
             )
 
             icon_x += 52
-
-        # -----------------------------
-        # Clock
-        # -----------------------------
 
         font = pygame.font.SysFont(
             "arial",

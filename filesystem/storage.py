@@ -15,7 +15,6 @@ from typing import Any, Optional
 from filesystem.folder import Folder
 from filesystem.virtual_file import VirtualFile
 
-
 class FileSystemStorage:
     """Manages filesystem state persistence and tree serialization."""
 
@@ -60,10 +59,10 @@ class FileSystemStorage:
 
     def load(self, path: str = "VOS.os") -> Optional[Folder]:
         """
-        Restores the filesystem hierarchy. Priority is given to the virtual disk 
+        Restores the filesystem hierarchy. Priority is given to the virtual disk
         Registry file; falls back to the local backup file if unavailable.
         """
-        # 1. Primary load: Virtual Disk Registry
+
         if hasattr(self.disk, "file_table") and "Registry" in self.disk.file_table:
             try:
                 raw_data = self.disk.read_file("Registry")
@@ -78,7 +77,6 @@ class FileSystemStorage:
             except Exception as e:
                 print(f"[STORAGE] Virtual disk loading failed: {e}. Checking backup...")
 
-        # 2. Secondary load: Local disk fallback
         if not os.path.exists(path):
             print(f"[STORAGE] Save backup not found: {path}")
             return None
@@ -116,7 +114,6 @@ class FileSystemStorage:
         folder_name = data.get("name", "root")
         folder = Folder(folder_name, parent=parent)
 
-        # Reconstruct file nodes
         for filename, file_data in data.get("files", {}).items():
             if isinstance(file_data, dict):
                 fname = file_data.get("name", filename)
@@ -128,7 +125,6 @@ class FileSystemStorage:
             virtual_file = VirtualFile(fname, fcontent)
             folder.files[filename] = virtual_file
 
-        # Reconstruct child folder nodes
         for name, subfolder_data in data.get("folders", {}).items():
             subfolder = self._dict_to_folder(subfolder_data, parent=folder)
             if hasattr(folder, "add_folder"):

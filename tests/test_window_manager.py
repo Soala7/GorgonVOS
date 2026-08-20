@@ -1,15 +1,12 @@
 from desktop.ui.window.window import Window
 from desktop.ui.window.window_manager import WindowManager
 
-
 class DummyRenderer:
     pass
-
 
 class DummyEvent:
 
     handled = False
-
 
 def main():
 
@@ -44,7 +41,6 @@ def main():
     assert len(manager.windows) == 1
 
     print("WindowManager tests passed.")
-
 
 if __name__ == "__main__":
     main()

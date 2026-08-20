@@ -1,6 +1,5 @@
 from desktop.ui.window.titlebar import TitleBar
 
-
 def main():
 
     bar = TitleBar("Browser")
@@ -14,7 +13,6 @@ def main():
     assert len(bar.children) == 1
 
     print("TitleBar tests passed.")
-
 
 if __name__ == "__main__":
     main()

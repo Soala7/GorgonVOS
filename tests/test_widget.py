@@ -1,6 +1,5 @@
 from desktop.ui.widgets.widget import Widget
 
-
 def main():
 
     widget = Widget()
@@ -24,7 +23,6 @@ def main():
     assert widget.is_enabled()
 
     print("Widget tests passed.")
-
 
 if __name__ == "__main__":
     main()

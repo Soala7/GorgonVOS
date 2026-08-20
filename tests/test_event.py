@@ -9,7 +9,6 @@ from desktop.ui.core.event import (
     EventType,
 )
 
-
 def main():
     move = MouseMoveEvent(10, 20)
     assert move.event_type == EventType.MOUSE_MOVE
@@ -39,7 +38,6 @@ def main():
     assert custom.handled
 
     print("Event tests passed.")
-
 
 if __name__ == "__main__":
     main()

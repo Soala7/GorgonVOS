@@ -6,7 +6,6 @@ from core.logger import Logger
 from core.event_bus import EventBus
 from core.services_manager import ServiceManager
 
-
 def test_core_system():
     print("\n[TEST] Core System Boot Test")
 
@@ -31,7 +30,6 @@ def test_core_system():
     assert service.ping() == "pong"
 
     print("[TEST PASSED] Core systems working correctly")
-
 
 if __name__ == "__main__":
     test_core_system()

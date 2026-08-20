@@ -6,7 +6,6 @@ import pygame
 from desktop.shell.dock import Dock
 from desktop.ui.core.event import KeyModifier, KeyReleaseEvent, MouseButton, MousePressEvent
 
-
 class DockEventTests(unittest.TestCase):
     def test_dock_handles_ui_mouse_press(self):
         dock = Dock()
@@ -24,7 +23,6 @@ class DockEventTests(unittest.TestCase):
         dock.handle_event(KeyReleaseEvent(13, KeyModifier.NONE))
 
         self.assertFalse(dock.launcher_open)
-
 
 if __name__ == "__main__":
     unittest.main()

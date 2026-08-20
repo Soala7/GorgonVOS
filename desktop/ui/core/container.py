@@ -9,7 +9,6 @@ from __future__ import annotations
 from desktop.ui.core.component import Component
 from desktop.ui.core.event import UIEvent
 
-
 class Container(Component):
     """
     A component that owns and manages child components.

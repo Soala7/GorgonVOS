@@ -1,14 +1,11 @@
 from desktop.shell.desktop import Desktop
 from desktop.ui.window.window import Window
 
-
 class DummyRenderer:
     pass
 
-
 class DummyEvent:
     handled = False
-
 
 def main():
 
@@ -31,7 +28,6 @@ def main():
     assert len(desktop.window_manager.windows) == 0
 
     print("Desktop tests passed.")
-
 
 if __name__ == "__main__":
     main()

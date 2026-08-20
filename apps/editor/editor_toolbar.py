@@ -1,7 +1,6 @@
-# editor_toolbar.py
+
 import pygame
 from bridge.vos_api import vos_api
-
 
 class EditorToolbar:
 

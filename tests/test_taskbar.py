@@ -1,7 +1,6 @@
 from desktop.shell.taskbar import Taskbar
 from desktop.ui.widgets.button import Button
 
-
 def main():
 
     taskbar = Taskbar()
@@ -25,7 +24,6 @@ def main():
     assert len(taskbar.children) == 1
 
     print("Taskbar tests passed.")
-
 
 if __name__ == "__main__":
     main()

@@ -10,16 +10,11 @@ import pygame
 
 from desktop.renderer.renderer import Renderer
 
-
 class PygameRenderer(Renderer):
 
     def __init__(self, surface: pygame.Surface) -> None:
 
         self.surface = surface
-
-    # --------------------------------------------------
-    # Frame
-    # --------------------------------------------------
 
     def begin_frame(self) -> None:
         pass
@@ -27,17 +22,9 @@ class PygameRenderer(Renderer):
     def end_frame(self) -> None:
         pygame.display.flip()
 
-    # --------------------------------------------------
-    # Screen
-    # --------------------------------------------------
-
     def clear(self, color) -> None:
 
         self.surface.fill(color)
-
-    # --------------------------------------------------
-    # Shapes
-    # --------------------------------------------------
 
     def draw_rect(self, rect, color) -> None:
 
@@ -71,10 +58,6 @@ class PygameRenderer(Renderer):
             width,
         )
 
-    # --------------------------------------------------
-    # Text
-    # --------------------------------------------------
-
     def draw_text(
         self,
         text,
@@ -105,10 +88,6 @@ class PygameRenderer(Renderer):
             rendered,
             (x, y),
         )
-
-    # --------------------------------------------------
-    # Images
-    # --------------------------------------------------
 
     def draw_image(
         self,
@@ -147,10 +126,6 @@ class PygameRenderer(Renderer):
                 bounds.y,
             ),
         )
-
-    # --------------------------------------------------
-    # TextBox
-    # --------------------------------------------------
 
     def draw_textbox(
         self,

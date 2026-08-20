@@ -23,9 +23,8 @@ from desktop.ui.core.event import (
     MouseButton,
 )
 
-
 class BootManager:
-    #Controls the startup sequence of Gorgon OS.
+
     BOOT = "boot"
     LOGIN = "login"
     DESKTOP = "desktop"
@@ -44,17 +43,12 @@ class BootManager:
 
         self.state = self.BOOT
 
-        # Force clean startup every launch
         self.boot_screen.finished = False
         self.login_screen.logged_in = False
 
         self.boot_screen.start()
 
         print("[BOOT] State:", self.state)
-
-    # --------------------------------------------------
-    # Update
-    # --------------------------------------------------
 
     def update(self, dt: float) -> None:
 
@@ -78,30 +72,36 @@ class BootManager:
 
             self.shell.update(dt)
 
-    # --------------------------------------------------
-    # Draw
-    # --------------------------------------------------
+    def restart_session(self, boot_again: bool = False) -> None:
+        for window in list(self.shell.desktop.window_manager.windows):
+            window.close()
+        self.shell.desktop.window_manager.windows.clear()
+        self.shell.desktop.window_manager.active_window = None
+        pygame.mixer.music.stop()
+        self.login_screen = LoginScreen()
+        self.shell = Shell(self.kernel.service_manager)
+        if boot_again:
+            self.boot_screen = BootScreen()
+            self.boot_screen.start()
+            self.state = self.BOOT
+        else:
+            self.state = self.LOGIN
 
     def draw(self,renderer,) -> None:
-        #Draw Boot
+
         if self.state == self.BOOT:
 
             self.boot_screen.draw(renderer)
-        #Draws Login
+
         elif self.state == self.LOGIN:
 
             self.login_screen.draw(renderer)
-        #Draw Desktop
+
         elif self.state == self.DESKTOP:
 
             self.shell.draw(renderer)
 
-        # Always draw cursor LAST
         self.cursor.draw(renderer)
-
-    # --------------------------------------------------
-    # Events
-    # --------------------------------------------------
 
     def handle_event(self,event,) -> None:
 
@@ -157,7 +157,7 @@ class BootManager:
         return None
 
     def _map_button(self, button):
-        #REPORTS TO _convert_pygame_event
+
         match button:
             case 1: return MouseButton.LEFT
             case 2: return MouseButton.MIDDLE

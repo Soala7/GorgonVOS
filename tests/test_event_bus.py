@@ -19,6 +19,5 @@ def test_event_bus():
 
     print("✓ EventBus test passed")
 
-
 if __name__ == "__main__":
     test_event_bus()

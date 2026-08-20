@@ -1,33 +1,29 @@
-# apps/explorer/explorer_navigation.py
+
 """Navigation logic for Explorer"""
 
 class ExplorerNavigation:
-    #Mixin class for navigation
-    
+
     def navigate_to(self, folder):
-        #Unified navigation method
+
         target_name = getattr(folder, "name", "Computer (Dashboard)")
         print(f"[VOS] Navigating to: {target_name}")
-        
+
         self.current_folder = folder
-        
-        # Truncate history
+
         self.history = self.history[:self.history_index + 1]
-        
-        # Only append if not None
+
         if folder is not None:
             self.history.append(folder)
             self.history_index += 1
-        
+
         self._sync_sidebar_from_current_folder()
         self.selected_item = None
-        
-        # Update window title
+
         if folder is not None:
             self.title = f"{target_name} - Explorer"
         else:
             self.title = "Explorer"
-        
+
         print(f"[VOS] History length: {len(self.history)}")
 
     def _sync_sidebar_from_current_folder(self):
@@ -35,7 +31,7 @@ class ExplorerNavigation:
         if self.current_folder is None:
             self.selected_sidebar = "Computer"
             return
-        
+
         curr = self.current_folder
         while curr is not None:
             name = getattr(curr, "name", None)
@@ -73,7 +69,7 @@ class ExplorerNavigation:
             print("[VOS] Parent is None, navigating to Computer root.")
             self.navigate_to(None)
             return
-        
+
         print(f"[VOS] Navigating UP to: {getattr(parent, 'name', 'Unknown')}")
         self.current_folder = parent
         self.history_index += 1
@@ -98,23 +94,3 @@ class ExplorerNavigation:
         self.current_folder = None
         self.current_folder = current
         print("[VOS] View refreshed")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        

@@ -2,7 +2,6 @@ from desktop.ui.layout.stack_layout import StackLayout
 from desktop.ui.core.container import Container
 from desktop.ui.core.component import Component
 
-
 def main():
 
     container = Container()
@@ -27,7 +26,6 @@ def main():
         assert child.transform.position.y == 10
 
     print("Stack layout tests passed.")
-
 
 if __name__ == "__main__":
     main()

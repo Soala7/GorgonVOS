@@ -1,9 +1,8 @@
-# editor_tabs.py
+
 from __future__ import annotations
 import pygame
 from typing import List, Optional
 from .editor_buffer import EditorBuffer
-
 
 class TabInstance:
     """Encapsulates buffer state and file metadata for an individual tab."""
@@ -14,7 +13,6 @@ class TabInstance:
         self.buffer: EditorBuffer = EditorBuffer()
         self.scroll_y: int = 0
         self.target_cursor_x: float = 0.0
-
 
 class EditorTabManager:
     """Handles tab lifecycle, active buffer switching, and tab bar layout."""

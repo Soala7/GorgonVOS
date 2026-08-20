@@ -1,7 +1,6 @@
 from desktop.shell.desktop_icons import DesktopIcons
 from desktop.ui.widgets.button import Button
 
-
 def main():
 
     icons = DesktopIcons()
@@ -23,7 +22,6 @@ def main():
     assert len(icons.children) == 0
 
     print("DesktopIcons tests passed.")
-
 
 if __name__ == "__main__":
     main()

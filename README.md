@@ -9,40 +9,40 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Phase%201-Simulator-success" alt="Phase 1">
+  <img src="https://img.shields.io/badge/Phase%201-Complete-success" alt="Phase 1">
   <img src="https://img.shields.io/badge/Language-Python-blue" alt="Python">
-  <img src="https://img.shields.io/badge/Status-In%20Development-blue" alt="Status">
+  <img src="https://img.shields.io/badge/Status-Phase%201%20Complete-success" alt="Status">
+  <img src="https://img.shields.io/github/downloads/Soala7/GorgonVOS/total" alt="Downloads">
 </p>
 
 ---
 
-## About VOS
+# About VOS
 
 **VOS (Virtual Operating System)** is a project where I am building an operating system from the ground up while learning how operating systems, filesystems, applications, system architecture, and lower-level programming work.
 
 Rather than trying to jump directly into building a real operating system, I divided the project into three stages:
 
-```text
 Phase 1 — Simulator
         ↓
 Phase 2 — Semi-real
         ↓
 Phase 3 — Real OS
-```
 
-The current implementation is **Phase 1 — the Simulator**.
 
-The goal of Phase 1 is to create the structure and behavior of an operating system in a controlled environment before moving closer to real hardware and lower-level system development.
+**Phase 1 — Simulator is now complete.**
+
+The purpose of Phase 1 was to create a functional simulated operating-system environment where applications, filesystems, storage, windows, and system components could communicate with each other.
+
+This phase gave me a foundation for understanding how the different parts of an operating system fit together before moving toward lower-level development.
 
 ---
 
-# Current Stage
+# Phase 1 — Simulator
 
-## Phase 1 — Simulator
+Phase 1 focused on simulating the major components users would interact with in an operating system.
 
-Phase 1 focuses on simulating the major components users would interact with in an operating system.
-
-### Current Features
+### Completed Features
 
 * Virtual desktop environment
 * Window management
@@ -52,17 +52,201 @@ Phase 1 focuses on simulating the major components users would interact with in 
 * Text Editor
 * Terminal / shell
 * Application architecture
+* Application launcher
 * File creation and saving
 * Opening and editing virtual files
+* Virtual directories
+* File operations
 * Communication between applications and the virtual filesystem
+* Basic system applications
+* Basic browser
+* Music player
+* Game application
+* Wallpaper settings
 
 The simulator is designed so that applications interact with the **VOS filesystem** rather than directly treating the host computer's filesystem as the operating system's storage.
 
 ---
 
+# Applications
+
+VOS contains several applications that demonstrate how applications can interact with the simulated operating system.
+
+## File Explorer
+
+<p align="center">
+  <img src="assets/screenshot/explorer.png" width="850" alt="VOS File Explorer">
+</p>
+
+The File Explorer interacts with the VOS virtual filesystem and allows files and directories to be created, opened, and managed.
+
+It provides the graphical interface for navigating the simulated filesystem.
+
+---
+
+## Text Editor
+
+<p align="center">
+  <img src="assets/screenshot/text_editor.png" width="850" alt="VOS Text Editor">
+</p>
+
+The Text Editor is connected to the virtual filesystem.
+
+It allows users to:
+
+* Create text files
+* Open files
+* Edit files
+* Save files
+* Work with files stored inside VOS
+
+This was one of the main applications used to demonstrate communication between an application and the VOS filesystem.
+
+---
+
+## Terminal
+
+<p align="center">
+  <img src="assets/screenshot/terminal.png" width="850" alt="VOS Terminal">
+</p>
+
+The Terminal provides a command-line interface for interacting with VOS.
+
+The terminal contains a shell implemented with C while the graphical terminal application communicates with it through the VOS architecture.
+
+Current commands include filesystem and system operations such as:
+
+```text
+about
+cat
+cd
+clear
+cp
+date
+echo
+exit
+help
+ls
+mkdir
+mv
+pwd
+rm
+rmdir
+time
+touch
+tree
+version
+write
+```
+
+The terminal provides another way of interacting with the VOS filesystem besides the graphical applications.
+
+---
+
+## Launcher
+
+<p align="center">
+  <img src="assets/screenshot/launcher.png" width="850" alt="VOS Launcher">
+</p>
+
+The Launcher provides a central interface for discovering and opening applications available within VOS.
+
+Applications such as the:
+
+* Terminal
+* File Explorer
+* Text Editor
+* Browser
+* Music Player
+* Game
+
+can be launched from the VOS desktop environment.
+
+The Launcher is also designed so that additional applications can be connected to it as the project grows.
+
+---
+
+## Browser
+
+<p align="center">
+  <img src="assets/screenshot/browser.png" width="850" alt="VOS Browser">
+</p>
+
+VOS includes a basic experimental browser.
+
+The browser is intentionally limited in Phase 1.
+
+It uses Python's `urllib` functionality to retrieve web content and currently focuses on **text-based websites** rather than attempting to reproduce a full modern web browser.
+
+It does not currently provide the full rendering capabilities of browsers such as Firefox or Chromium.
+
+The purpose of the browser in Phase 1 is mainly to demonstrate that VOS applications can communicate with external resources while still running inside the simulated environment.
+
+---
+
+## Music Player
+
+<p align="center">
+  <img src="assets/screenshot/music.png" width="850" alt="VOS Music Player">
+</p>
+
+The Music application provides basic audio playback.
+
+For Phase 1, the player works with audio files stored inside:
+
+```text
+assets/music/
+```
+
+It is intentionally simple and is mainly used to demonstrate multimedia application support inside VOS.
+
+The player does not currently function as an online music streaming service.
+
+---
+
+## Game
+
+<p align="center">
+  <img src="assets/screenshot/game.png" width="850" alt="VOS Game">
+</p>
+
+VOS includes a simple arcade-style game inspired by Pac-Man.
+
+The game demonstrates that VOS can run interactive applications alongside system applications such as the Explorer, Terminal, and Editor.
+
+It is primarily an example of application support rather than a major component of the operating system itself.
+
+---
+
+## Settings
+
+<p align="center">
+  <img src="assets/screenshot/settings.png" width="850" alt="VOS Settings">
+</p>
+
+The Settings application currently provides basic desktop customization.
+
+At the Phase 1 completion point, its main function is changing the desktop wallpaper.
+
+More system settings can be added in future phases.
+
+---
+
+# Desktop
+
+<p align="center">
+  <img src="assets/screenshot/desktop.png" width="850" alt="VOS Desktop">
+</p>
+
+The VOS desktop provides the main environment from which applications can be launched and managed.
+
+It contains the simulated desktop, window system, launcher, and running applications.
+
+---
+
 # Architecture
 
-The current architecture is being built around separating the simulated operating system from the host environment.
+The current architecture is built around separating the simulated operating system from the host environment.
 
 ```text
                          VOS
@@ -73,7 +257,7 @@ The current architecture is being built around separating the simulated operatin
                           │
               ┌───────────┼───────────┐
               │           │           │
-          Explorer     Editor      Terminal
+          Explorer      Editor      Terminal
               │           │           │
               └───────────┼───────────┘
                           │
@@ -109,53 +293,6 @@ This allows the simulator to behave more like an operating system instead of sim
 
 ---
 
-# Screenshots
-
-## VOS Desktop
-
-<p align="center">
-  <img src="assets/screenshot/desktop.png" width="850" alt="VOS Desktop">
-</p>
-
-The virtual desktop provides the main environment from which VOS applications can be launched and managed.
-
----
-
-## VOS Launcher
-
-<p align="center"> <img src="assets/screenshot/launcher.png" width="850" alt="VOS Launcher"> </p>
-
-The Launcher provides a central way to discover and open applications available within VOS.
-
----
-
-## VOS File Explorer
-
-<p align="center">
-  <img src="assets/screenshot/explorer.png" width="850" alt="VOS File Explorer">
-</p>
-
-The File Explorer interacts with the VOS virtual filesystem and allows files and directories to be created, opened, and managed.
-
----
-
-## VOS Text Editor
-
-<p align="center">
-  <img src="assets/screenshot/text_editor.png" width="850" alt="VOS Text Editor">
-</p>
-
-The Text Editor is connected to the virtual filesystem, allowing files stored inside VOS to be opened, edited, created, and saved.
-
----
-
-## VOS Terminal
-
-<p align="center"> <img src="assets/screenshot/terminal.png" width="850" alt="VOS Terminal"> </p>
-
-The Terminal provides a command-line interface for interacting with VOS and its simulated.
-
----
 # How It Works
 
 VOS uses the host operating system as the environment in which the simulator runs, while creating its own simulated operating-system layer above it.
@@ -195,7 +332,7 @@ One of the main components of Phase 1 is the **VOS virtual filesystem**.
 
 Instead of allowing applications to freely manage the host filesystem, VOS provides its own filesystem interface.
 
-This gives applications a common way to perform operations such as:
+Applications can perform operations such as:
 
 ```text
 Create
@@ -206,33 +343,61 @@ Open
 Delete
 Rename
 Create Directory
+Copy
+Move
 ```
 
 The goal is to make applications depend on the VOS system rather than depending directly on the host environment.
 
-This also creates a foundation that can eventually be replaced or heavily modified when moving toward Phase 2 and Phase 3.
+This creates a foundation that can eventually be replaced or heavily modified when moving toward Phase 2 and Phase 3.
 
 ---
 
-# Applications
+# Window Management
+
+VOS contains a window management system responsible for managing running application windows.
+
+The Window Manager handles things such as:
+
+* Adding windows
+* Removing windows
+* Closing windows
+* Focusing windows
+* Activating windows
+* Updating windows
+* Drawing windows
+* Routing events to the active window
+
+This allows applications such as the Explorer, Editor, and Terminal to behave like independent applications inside the same desktop environment.
+
+---
+
+# Application Architecture
 
 VOS is designed around individual applications communicating with shared system components.
 
-Current applications include:
+Conceptually:
 
-### File Explorer
+```text
+                 VOS Desktop
+                      │
+                Application
+                   Manager
+                      │
+        ┌─────────────┼─────────────┐
+        │             │             │
+    Explorer       Editor       Terminal
+        │             │             │
+        └─────────────┼─────────────┘
+                      │
+               VOS System APIs
+                      │
+              Virtual Filesystem
+                      │
+               Virtual Storage
+```
 
-Used to navigate and manage the VOS filesystem.
-
-### Text Editor
-
-Used to create and edit files stored inside VOS.
-
-### Terminal
-
-Provides a command-line interface for interacting with the simulated system.
-
-More applications will be added as the system develops.
+This architecture allows new applications to be added without completely rewriting the rest of the simulator.
 
 ---
 
@@ -243,30 +408,78 @@ The project is organized around separating applications, system components, asse
 ```text
 VOS/
 │
+├── api/
 ├── apps/
-│   ├── explorer/
+│   ├── browser/
 │   ├── editor/
-│   └── ...
-│
-├── filesystem/
-│   └── ...
-│
-├── system/
+│   ├── explorer/
+│   ├── terminal/
 │   └── ...
 │
 ├── assets/
 │   ├── logo.svg
+│   ├── music/
 │   └── screenshots/
 │
+├── boot/
+├── database/
+├── desktop/
 ├── drivers/
-│   └── ...
+├── filesystem/
+├── kernel/
+├── network/
+├── process/
+├── security/
+├── users/
+│
+├── data/
+├── vos_disk/
 │
 ├── main.py
-│
 └── README.md
 ```
 
-The structure will continue to change as VOS moves through the different development phases.
+The structure will continue to evolve as VOS moves into future development phases.
+
+---
+
+# Phase 1 Completion
+
+**Phase 1 — Simulator is complete.**
+
+The goal of Phase 1 was not to create a perfect operating system.
+
+The goal was to build a functional simulated environment and learn how its major components could work together.
+
+The completed Phase 1 provides:
+
+```text
+Desktop
+   │
+   ├── Launcher
+   │
+   ├── Window Manager
+   │
+   └── Applications
+          │
+          ├── Explorer
+          ├── Editor
+          ├── Terminal
+          ├── Browser
+          ├── Music
+          └── Game
+                  │
+                  ↓
+           VOS System Layer
+                  │
+                  ↓
+          Virtual Filesystem
+                  │
+                  ↓
+           Virtual Storage
+```
+
+There are still many things that can be improved, but the main objective of the simulator phase has been achieved.
 
 ---
 
@@ -274,13 +487,13 @@ The structure will continue to change as VOS moves through the different develop
 
 VOS is planned as a three-stage project.
 
-| Phase                   | Description                                                                             | Status        |
-| ----------------------- | --------------------------------------------------------------------------------------- | ------------- |
-| **Phase 1 — Simulator** | Simulate an operating system in a controlled environment                                | ✅ In Progress |
-| **Phase 2 — Semi-real** | Move more system functionality toward lower-level and hardware-oriented implementations | ⬜ Planned     |
-| **Phase 3 — Real OS**   | Build toward an actual bootable operating system                                        | ⬜ Future      |
+| Phase                   | Description                                                                             | Status     |
+| ----------------------- | --------------------------------------------------------------------------------------- | ---------- |
+| **Phase 1 — Simulator** | Simulate an operating system in a controlled environment                                | ✅ Complete |
+| **Phase 2 — Semi-real** | Move more system functionality toward lower-level and hardware-oriented implementations | ⬜ Planned  |
+| **Phase 3 — Real OS**   | Build toward an actual bootable operating system                                        | ⬜ Future   |
 
-### Phase 1
+## Phase 1
 
 ```text
 Desktop
@@ -291,11 +504,20 @@ Window Management
 Terminal
 Editor
 Explorer
+Launcher
+Browser
+Music
+Game
+Settings
 ```
 
-### Phase 2
+**Status: ✅ Complete**
 
-The goal is to gradually replace simulated components with more realistic system-level implementations.
+---
+
+# Phase 2 — Semi-real
+
+The goal of Phase 2 is to gradually move away from purely simulated components and begin implementing more realistic system-level functionality.
 
 This phase will involve significantly more work with:
 
@@ -307,8 +529,15 @@ This phase will involve significantly more work with:
 * Hardware interaction
 * Drivers
 * System interfaces
+* Processes
+* Low-level storage
+* Networking
 
-### Phase 3
+Phase 2 will be a major learning step toward understanding how the components built in Phase 1 could eventually map onto real computer hardware.
+
+---
+
+# Phase 3 — Real OS
 
 The long-term goal is to move beyond simulation and begin building an actual operating system capable of interacting directly with hardware.
 
@@ -324,6 +553,9 @@ This will involve areas such as:
 * Processes
 * Scheduling
 * System calls
+* Hardware interaction
+
+This is the long-term direction of the project.
 
 ---
 
@@ -382,7 +614,7 @@ VOS should launch into the virtual desktop environment.
 
 VOS is not being built by immediately trying to reproduce an entire operating system.
 
-Instead, I am building it in layers.
+Instead, I am building it in layers:
 
 ```text
 Understand
@@ -391,14 +623,18 @@ Simulate
     ↓
 Connect
     ↓
+Test
+    ↓
+Improve
+    ↓
 Replace
     ↓
 Build for real hardware
 ```
 
-The simulator allows me to understand what the individual components of an operating system actually do before attempting to implement those components at a lower level.
+The simulator allowed me to understand what the individual components of an operating system actually do before attempting to implement those components at a lower level.
 
-This also makes it easier to experiment, break things, debug them, and understand why they broke.
+It also made it possible to experiment, break things, debug them, and understand why they broke.
 
 ---
 
@@ -414,43 +650,77 @@ But I quickly realized that jumping straight into kernel development without und
 
 So I decided to build a simulator first.
 
-VOS is therefore both a software project and a long-term learning project.
+VOS became both a software project and a long-term learning project.
 
-Every phase is intended to get closer to understanding how a real operating system works.
+Phase 1 was about learning how the pieces fit together.
+
+Phase 2 will be about getting closer to how those pieces work underneath.
+
+Phase 3 is the long-term goal of building an actual operating system.
 
 ---
 
-# Future Plans
+# What Comes Next
 
-The project is still actively being developed.
+With Phase 1 complete, I can now move my focus toward Phase 2.
 
-Some of the long-term goals include:
+However, completing Phase 1 does **not** mean that VOS is frozen.
 
-* Improve the virtual filesystem
-* Expand the terminal
-* Add more system applications
-* Improve process and application management
-* Build stronger separation between system components
-* Improve VOS architecture
-* Begin Phase 2
-* Learn and implement lower-level system components
-* Eventually move toward a real bootable operating system
+I will continue coming back to Phase 1 to:
 
-The architecture will likely change considerably as my understanding of operating systems improves.
+* Fix bugs
+* Improve existing applications
+* Improve the UI
+* Improve performance
+* Improve the filesystem
+* Add missing features
+* Improve the architecture
+* Experiment with new ideas
+
+The project will continue evolving as my understanding improves.
+
+---
+
+# Contributions and Experiments
+
+If you find this project interesting, you are welcome to explore it.
+
+You can:
+
+* Read the code
+* Run VOS
+* Find bugs
+* Suggest improvements
+* Experiment with the architecture
+* Improve an application
+* Add features
+* Improve the UI
+* Help with documentation
+* Open issues
+* Submit pull requests
+
+You do not have to be an operating-system expert to contribute.
+
+One of the reasons I built VOS this way was to learn by building, experimenting, and making mistakes.
+
+If you have an idea that could make VOS better, **try it.**
+
+You might teach me something I had not considered.
 
 ---
 
 # Current Goal
 
-The immediate goal is to finish polishing **Phase 1 — Simulator**, document the architecture properly, and establish a strong foundation before beginning Phase 2.
+The immediate goal after completing Phase 1 is to begin preparing for **Phase 2 — Semi-real**.
 
 ```text
 Phase 1
    │
-   ├── Build
-   ├── Test
-   ├── Document
-   └── Understand
+   ├── Build       ✅
+   ├── Test        ✅
+   ├── Connect     ✅
+   ├── Document    ✅
+   └── Complete    ✅
           │
           ↓
        Phase 2
@@ -459,29 +729,47 @@ Phase 1
        Phase 3
 ```
 
+Phase 1 created the foundation.
+
+Now the next challenge is understanding what happens underneath the simulation.
+
 ---
 
 # Status
 
-**VOS is currently in Phase 1 — Simulator.**
+**VOS Phase 1 — Simulator: ✅ COMPLETE**
 
-The simulator is functional and its core applications are being connected to the virtual filesystem and system architecture.
+The simulator currently provides a functional virtual desktop, application environment, virtual filesystem, storage system, terminal, window manager, and multiple system applications.
 
-This project is still under active development, so the architecture and features are expected to change.
+The project is still under active development, but the first major milestone has been reached.
+
+I will continue improving Phase 1 when needed while working toward Phase 2.
 
 ---
 
-## Author
+# Author
 
 Built by **Soala Amachree**.
 
 Learning by building.
 
+```text
+Build it.
+Break it.
+Understand it.
+Improve it.
+Then build it for real.
+```
+
 ---
 
-## License
+# License
 
-This project is currently under development. See the repository for licensing information.
+This project is currently under development.
 
----
+See the repository for licensing information.
+
+```
+```
+
 

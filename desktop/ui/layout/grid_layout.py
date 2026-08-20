@@ -9,7 +9,6 @@ from __future__ import annotations
 from desktop.ui.layout.base_layout import BaseLayout
 from desktop.ui.core.container import Container
 
-
 class GridLayout(BaseLayout):
     """
     Arranges children in a grid.

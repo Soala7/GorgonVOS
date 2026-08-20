@@ -1,8 +1,7 @@
 from resources.paths import ICONS
 
-
 class IconManager:
-    #Loads application and system icons.
+
     def __init__(self, assets):
         self.assets = assets
 

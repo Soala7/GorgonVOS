@@ -8,9 +8,7 @@ class VOSAPI:
         self.filesystem = None
         self.process_manager = None
         self.window_manager = None
-    # -------------------------
-    # Service registration
-    # -------------------------
+
     def register_filesystem(self, filesystem):
         self.filesystem = filesystem
 
@@ -19,14 +17,12 @@ class VOSAPI:
 
     def register_window_manager(self, window_manager):
         self.window_manager = window_manager
-    # -------------------------
-    # Filesystem commands
-    # -------------------------
+
     def pwd(self):
         if self.filesystem:
             return self.filesystem.get_current_path()
         return "/"
-    
+
     def ls(self, path=None):
         if not self.filesystem:
             return ""
@@ -182,6 +178,4 @@ class VOSAPI:
             print("[VOS API] cp error:", error)
             return False
 
-
-# Global API instance
 vos_api = VOSAPI()

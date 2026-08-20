@@ -5,13 +5,13 @@ import time
 import pygame
 
 from desktop.ui.window.window import Window
+from resources.cursor_manager import cursor_manager
 from desktop.assests.icon_manager import IconManager
 from bridge.vos_api import vos_api
 
 from apps.explorer.explorer_navigation import ExplorerNavigation
 from apps.explorer.explorer_operations import ExplorerOperations
 from apps.explorer.explorer_render import ExplorerRender
-
 
 class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Window):
     """Main Explorer Window handling navigation, file operations, and rendering."""
@@ -23,45 +23,37 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
         self.window_manager = window_manager
         self._init_filesystem()
 
-        # Window state
         self.minimized = False
         self.closed = False
         self.is_active = False
         self.transform.position.x = 180
         self.transform.position.y = 80
 
-        # User settings
         self.selected_sidebar = "Computer"
         self.user_name = self._get_username()
         self.search_progress = 0.0
 
-        # Navigation state
         self.current_folder = None
         self.history = []
         self.history_index = 0
 
-        # Selection state
         self.selected_item = None
         self.item_rects = []
         self.sidebar_hitboxes = []
         self.center_hitboxes = []
 
-        # Drag & Drop state
         self.dragging_item = None
         self.dragging = False
         self.drag_start_pos = (0, 0)
         self.drag_threshold = 8
         self.drop_target = None
 
-        # Folder creation
         self.new_folder_counter = 1
 
-        # Double-click handling
         self.double_click_time = 0.60
         self.last_click_time = time.time()
         self.last_clicked = None
 
-        # Sidebar items
         self.sidebar_items = [
             ("Computer", "explorer/computer"),
             ("Documents", "explorer/documents"),
@@ -74,7 +66,7 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
         ]
 
         self._load_icons()
-        self.navigate_to(None)  # None = Computer dashboard
+        self.navigate_to(None)
 
     def _init_filesystem(self):
         self.filesystem = None
@@ -112,7 +104,7 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
             "user": IconManager.get("explorer/user", size),
             "document": IconManager.get("explorer/document", size),
             "folder": IconManager.get("explorer/folder", size),
-            # Sidebar folder icons
+
             "computer": IconManager.get("explorer/computer", size),
             "documents_folder": IconManager.get("explorer/documents_folder", size),
             "downloads_folder": IconManager.get("explorer/downloads_folder", size),
@@ -121,7 +113,7 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
             "musics_folder": IconManager.get("explorer/musics_folder", size),
             "storages": IconManager.get("explorer/storages", size),
             "trashs": IconManager.get("explorer/trashs", size),
-            # File type icons
+
             "python": IconManager.get("files/python", size),
             "text": IconManager.get("files/text", size),
             "json": IconManager.get("files/json", size),
@@ -134,7 +126,7 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
             "pdf": IconManager.get("files/pdf", size),
             "spreadsheet": IconManager.get("files/spreadsheet", size),
             "zip": IconManager.get("files/zip", size),
-            # Center strip shortcuts
+
             "center_1": IconManager.get("explorer/documents_folder", size),
             "center_2": IconManager.get("explorer/downloads_folder", size),
             "center_3": IconManager.get("explorer/favorite_folder", size),
@@ -282,11 +274,8 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
         ev_type = getattr(event, "type", None)
         ev_key = getattr(event, "key", None)
 
-        # --------------------------------------------------
-        # Keyboard Event Interception
-        # --------------------------------------------------
         is_key_down = (
-            ev_type == pygame.KEYDOWN or 
+            ev_type == pygame.KEYDOWN or
             type(event).__name__ in ("KeyPressEvent", "KeyDownEvent", "KeyEvent")
         )
 
@@ -324,9 +313,6 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
                     self._create_folder()
                     return
 
-        # --------------------------------------------------
-        # Convert Mouse Coordinates to Window-Relative
-        # --------------------------------------------------
         mx, my = pygame.mouse.get_pos()
         rel_x = mx - self.transform.position.x
         rel_y = my - self.transform.position.y
@@ -342,9 +328,6 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
             elif ev_type == pygame.MOUSEBUTTONUP and getattr(event, "button", None) == 1:
                 self._finish_drag(rel_pos)
 
-        # --------------------------------------------------
-        # Standard Click Dispatching
-        # --------------------------------------------------
         ww = self.transform.size.width
         wh = self.transform.size.height
         scale = max(0.65, min(ww / 920.0, wh / 620.0))
@@ -357,6 +340,12 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
             self._handle_click(rel_x, rel_y, scale, ww, wh)
 
         super().handle_event(event)
+        if type(event).__name__ == "MouseMoveEvent":
+            cursor_manager.set(cursor_manager.DEFAULT)
+            for rect, item in self.item_rects:
+                if rect.collidepoint(rel_x, rel_y):
+                    cursor_manager.set(cursor_manager.POINTER)
+                    break
 
     def _begin_drag(self, rel_pos):
         """Begin potential drag using relative window positions."""
@@ -396,7 +385,6 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
 
         self.drop_target = None
 
-        # Find folder underneath relative cursor position
         for rect, item in self.item_rects:
             if not rect.collidepoint(rel_pos):
                 continue
@@ -479,8 +467,6 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
         current = self.current_folder
         self.item_rects = []
 
-        # Re-navigate to force the renderer/navigation
-        # to rebuild the visible item list.
         self.navigate_to(current)
 
     def _handle_click(self, rel_x, rel_y, scale, ww, wh):
@@ -495,19 +481,16 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
         nav_x = int(18 * scale)
         top_icon_sz = max(12, int(16 * scale))
 
-        # Back button
         if pygame.Rect(nav_x, (self.TITLEBAR_HEIGHT - top_icon_sz) // 2, top_icon_sz, top_icon_sz).collidepoint(rel_x, rel_y):
             self.go_back()
             return
         nav_x += int(24 * scale)
 
-        # Forward button
         if pygame.Rect(nav_x, (self.TITLEBAR_HEIGHT - top_icon_sz) // 2, top_icon_sz, top_icon_sz).collidepoint(rel_x, rel_y):
             self.go_forward()
             return
         nav_x += int(24 * scale)
 
-        # Up button
         if pygame.Rect(nav_x, (self.TITLEBAR_HEIGHT - top_icon_sz) // 2, top_icon_sz, top_icon_sz).collidepoint(rel_x, rel_y):
             self.go_up()
 
@@ -528,11 +511,37 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
             self._handle_center_strip_click(rel_x, rel_y, center_strip_rect, scale)
             return
 
+        if self.current_folder is not None and self._handle_breadcrumb_click(rel_x, rel_y, scale, ww):
+            return
+
         if self.current_folder is not None:
             self._handle_folder_item_click(rel_x, rel_y, scale)
             return
 
         self.selected_item = None
+
+    def _handle_breadcrumb_click(self, rel_x, rel_y, scale, ww):
+        left_w = max(145, int(ww * 0.185))
+        center_w = max(48, int(ww * 0.065))
+        content_x = left_w + center_w + 34
+        breadcrumb_y = self.TITLEBAR_HEIGHT + 10 + int(30 * scale)
+        font = pygame.font.SysFont("Segoe UI", max(9, int(12 * scale)))
+        x = content_x
+        for index, name in enumerate(self.get_breadcrumb_path()):
+            width = font.size(name)[0]
+            if pygame.Rect(x, breadcrumb_y, width, max(18, int(16 * scale))).collidepoint(rel_x, rel_y):
+                if index == 0:
+                    self.navigate_to(None)
+                else:
+                    target = self.current_folder
+                    steps = len(self.get_breadcrumb_path()) - index - 1
+                    for _ in range(steps):
+                        target = getattr(target, "parent", None)
+                    if target is not None:
+                        self.navigate_to(target)
+                return True
+            x += width + font.size("› ")[0]
+        return False
 
     def _handle_sidebar_click(self, rel_x, rel_y, panel_rect, scale):
         """Handle clicks on sidebar items."""
@@ -670,8 +679,6 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
             + (current_y - start_y) ** 2
         ) ** 0.5
 
-        # Don't start dragging until the mouse has
-        # actually moved a little.
         if not self.dragging and distance >= self.drag_threshold:
             self.dragging = True
 
@@ -680,21 +687,17 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
 
         self.drop_target = None
 
-        # Find folder underneath cursor
         for rect, item in self.item_rects:
 
             if not rect.collidepoint(mouse_pos):
                 continue
 
-            # A file cannot be a drop target.
             if not self._is_item_folder(item):
                 continue
 
-            # Never allow Computer to be a drop target.
             if self._is_computer_item(item):
                 continue
 
-            # Don't drop a folder onto itself.
             if item is self.dragging_item:
                 continue
 
@@ -727,7 +730,6 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
 
         was_dragging = self.dragging
 
-        # Reset drag state first
         self.dragging_item = None
         self.dragging = False
         self.drop_target = None
@@ -775,15 +777,10 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
         if not destination_name:
             return False
 
-        # Don't move an item onto itself.
         if item is destination_folder:
             return False
 
         try:
-
-            # --------------------------------------------------
-            # Preferred filesystem API
-            # --------------------------------------------------
 
             if hasattr(self.filesystem, "move_file"):
 
@@ -818,10 +815,6 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
 
                         self._refresh_current_folder()
                         return True
-
-            # --------------------------------------------------
-            # Fallback for Folder objects
-            # --------------------------------------------------
 
             source_folder = self.current_folder
 
@@ -955,20 +948,3 @@ class ExplorerWindow(ExplorerNavigation, ExplorerOperations, ExplorerRender, Win
         ghost.blit(text, (40, 12))
 
         return ghost
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                

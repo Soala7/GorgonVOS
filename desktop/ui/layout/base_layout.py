@@ -10,7 +10,6 @@ from abc import ABC, abstractmethod
 
 from desktop.ui.core.container import Container
 
-
 class BaseLayout(ABC):
     """
     Base class for all layouts.

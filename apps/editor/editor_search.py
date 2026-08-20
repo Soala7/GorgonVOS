@@ -1,15 +1,16 @@
-# editor_search.py
+
 from __future__ import annotations
 from typing import Any, List, Tuple
-
 
 class EditorSearch:
     """Handles text query matching in the current buffer and folder file search."""
 
     def __init__(self) -> None:
         self.active_query: str = ""
-        self.matches: List[Tuple[int, int]] = []  # List of (row, col) matches
+        self.matches: List[Tuple[int, int]] = []
         self.current_match_idx: int = -1
+        self.visible = False
+        self.query = ""
 
     def find_in_buffer(self, buffer_lines: List[str], query: str) -> List[Tuple[int, int]]:
         """Search for a string query inside active document lines."""
@@ -47,7 +48,7 @@ class EditorSearch:
         self, dir_node: Any, query: str
     ) -> List[dict[str, Any]]:
         """
-        Scan a VFS target directory node (e.g. Documents, Downloads) 
+        Scan a VFS target directory node (e.g. Documents, Downloads)
         for matching file names and extension types.
         """
         if not dir_node or not query:

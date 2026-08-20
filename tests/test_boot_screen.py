@@ -2,7 +2,6 @@ import time
 
 from boot.boot_screen import BootScreen
 
-
 def main():
 
     boot = BootScreen(duration=0.5)
@@ -24,7 +23,6 @@ def main():
     assert not boot.finished
 
     print("BootScreen tests passed.")
-
 
 if __name__ == "__main__":
     main()
