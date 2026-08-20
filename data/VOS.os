@@ -1,6 +1,23 @@
 {
     "name": "/",
-    "files": {},
+    "files": {
+        "document.txt": {
+            "name": "document.txt",
+            "content": ""
+        },
+        "<filesystem.virtual_file.VirtualFile object at 0x7789ac094b00>": {
+            "name": "<filesystem.virtual_file.VirtualFile object at 0x7789ac094b00>",
+            "content": ""
+        },
+        "<filesystem.virtual_file.VirtualFile object at 0x73ec3404fbf0>": {
+            "name": "<filesystem.virtual_file.VirtualFile object at 0x73ec3404fbf0>",
+            "content": ""
+        },
+        "<filesystem.virtual_file.VirtualFile object at 0x7c878490dae0>": {
+            "name": "<filesystem.virtual_file.VirtualFile object at 0x7c878490dae0>",
+            "content": ""
+        }
+    },
     "folders": {
         "users": {
             "name": "users",
@@ -13,24 +30,14 @@
                         "Documents": {
                             "name": "Documents",
                             "files": {
-                                "Hello_Renamed.txt": {
-                                    "name": "Hello_Renamed.txt",
-                                    "content": "HELLO WORLD"
+                                "document.txt": {
+                                    "name": "document.txt",
+                                    "content": "Bro"
                                 }
                             },
                             "folders": {
                                 "Projects": {
                                     "name": "Projects",
-                                    "files": {},
-                                    "folders": {}
-                                },
-                                "PersistentFolder": {
-                                    "name": "PersistentFolder",
-                                    "files": {},
-                                    "folders": {}
-                                },
-                                "RenamedFolder": {
-                                    "name": "RenamedFolder",
                                     "files": {},
                                     "folders": {}
                                 }

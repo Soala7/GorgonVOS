@@ -10,10 +10,6 @@ from desktop.ui.core.container import Container
 
 
 class Panel(Container):
-    """
-    Simple container widget.
-    """
-
     def __init__(self, name: str = "Panel") -> None:
         super().__init__(name)
 

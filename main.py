@@ -28,10 +28,7 @@ def main() -> None:
     pygame.mouse.set_visible(False)
     pygame.display.set_caption("Gorgon VOS")
 
-    screen = pygame.display.set_mode(
-        (WIDTH, HEIGHT),
-        pygame.RESIZABLE,
-    )
+    screen = pygame.display.set_mode((WIDTH, HEIGHT),pygame.RESIZABLE)
 
     # -----------------------------
     # Window Manager

@@ -57,7 +57,7 @@ class Window(Panel):
 
     # In your Desktop / OS main update loop:
     def update(self, dt):
-        # Reset cursor to default each frame so widgets must actively claim hover states
+       # Reset cursor to default each frame so widgets must actively claim hover states
         cursor_manager.set(cursor_manager.DEFAULT)
 
         for widget in self.widgets:

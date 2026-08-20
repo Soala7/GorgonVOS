@@ -11,7 +11,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Phase%201-Simulator-success" alt="Phase 1">
   <img src="https://img.shields.io/badge/Language-Python-blue" alt="Python">
-  <img src="https://img.shields.io/badge/Status-In%20Development-orange" alt="Status">
+  <img src="https://img.shields.io/badge/Status-In%20Development-blue" alt="Status">
 </p>
 
 ---

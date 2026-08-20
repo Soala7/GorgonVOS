@@ -646,3 +646,25 @@ class Launcher(Widget):
         # ---------------------------------
         temp_surface.set_alpha(alpha)
         surface.blit(temp_surface, (0, 0))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
